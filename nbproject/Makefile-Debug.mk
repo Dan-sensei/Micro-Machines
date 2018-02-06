@@ -36,6 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/AssetManager.o \
+	${OBJECTDIR}/Collect.o \
+	${OBJECTDIR}/Enemy.o \
 	${OBJECTDIR}/main.o
 
 
@@ -73,6 +75,16 @@ ${OBJECTDIR}/AssetManager.o: AssetManager.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AssetManager.o AssetManager.cpp
+
+${OBJECTDIR}/Collect.o: Collect.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Collect.o Collect.cpp
+
+${OBJECTDIR}/Enemy.o: Enemy.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Enemy.o Enemy.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

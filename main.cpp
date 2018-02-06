@@ -34,8 +34,9 @@ int main(int argc, char** argv) {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Pacman");
     window.setFramerateLimit(60);
     AssetManager manager;
- 
-    
+    sf::Clock clock;
+    sf::Time deltaTime;
+    sf::Time elapsedTime;
     
     sf::Vector2f startPos = sf::Vector2f(50, 50);
     sf::Sprite rectShape = sf::Sprite(AssetManager::GetTexture("Images/pacman.png"));
@@ -51,13 +52,20 @@ int main(int argc, char** argv) {
     
     sf::RectangleShape badRect(sf::Vector2f(50, 100));
     initShape(badRect, sf::Vector2f(250, 50), sf::Color::Red);
+
     
     bool keys [256] = {false};
+    sf::Event event;
+    float dtAsSeconds;
     
     while (window.isOpen())
     {
         //Eventos
-        sf::Event event;
+        deltaTime = clock.restart();
+        elapsedTime += deltaTime;
+        
+        dtAsSeconds = deltaTime.asSeconds();
+        
         while (window.pollEvent(event))
         {
             switch (event.type){
@@ -80,6 +88,13 @@ int main(int argc, char** argv) {
         }
         
         //Actualizar escena
+        
+        if(rectShape.getGlobalBounds().intersects(targetRect.getGlobalBounds()))
+            window.close();
+        if(rectShape.getGlobalBounds().intersects(badRect.getGlobalBounds())){
+            rectShape.setPosition(startPos);
+        }
+            
         
         //  Arriba: 73   |  W: 22
         //   Abajo: 74   |  S: 18
@@ -105,10 +120,6 @@ int main(int argc, char** argv) {
         }
             
         
-        if(rectShape.getGlobalBounds().intersects(targetRect.getGlobalBounds()))
-            window.close();
-        if(rectShape.getGlobalBounds().intersects(badRect.getGlobalBounds()))
-            rectShape.setPosition(startPos);
         
         //Renderizar ciclo
         

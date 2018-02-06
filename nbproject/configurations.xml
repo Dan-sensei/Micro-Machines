@@ -5,6 +5,8 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>AssetManager.h</itemPath>
+      <itemPath>Collect.h</itemPath>
+      <itemPath>Enemy.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -14,6 +16,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>AssetManager.cpp</itemPath>
+      <itemPath>Collect.cpp</itemPath>
+      <itemPath>Enemy.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -58,6 +62,14 @@
       </item>
       <item path="AssetManager.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Collect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Collect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Enemy.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Enemy.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -84,6 +96,14 @@
       <item path="AssetManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AssetManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Collect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Collect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Enemy.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Enemy.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
