@@ -44,7 +44,6 @@
         <ccTool>
           <incDir>
             <pElem>/usr/include/SFML</pElem>
-            <pElem>../build/include</pElem>
           </incDir>
         </ccTool>
         <linkerTool>

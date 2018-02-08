@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+
+//Esta clase forma parte del libro "SFML Essentials para optimizar la carga de texturasd
+
 #include "AssetManager.h"
 #include <assert.h>
 
