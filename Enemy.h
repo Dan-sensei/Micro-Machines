@@ -14,13 +14,14 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-class Enemy {
-public:
-    Enemy();
-    Enemy(const Enemy& orig);
-    virtual ~Enemy();
-private:
+#include <SFML/System/Vector2.hpp>
+#include "AssetManager.h"
+#include "Car.h"
 
+class Enemy : public Car{
+public:
+    Enemy(sf::Vector2f startPos, AssetManager manager);
+    void logic();
 };
 
 #endif /* ENEMY_H */

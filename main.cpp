@@ -17,10 +17,13 @@
 #include <SFML/Graphics.hpp>
 
 #include "AssetManager.h"
+#include "Enemy.h"
+#include "Player.h"
 
 using namespace std;
 
-const float MAXSPEED = 550;
+const float AC = 20;
+const float MAXSPEED = 800;
 const float ROTATION = 300;
 const float PI = 3.14159265;
 /*
@@ -42,30 +45,31 @@ int main(int argc, char** argv) {
     sf::Time deltaTime;
     sf::Time elapsedTime;
     
-    int SPEED = 0; 
-    
-    sf::Vector2f startPos = sf::Vector2f(50, 50);
-    sf::Sprite rectShape = sf::Sprite(AssetManager::GetTexture("Images/275104-arrows.png"));
-    //initShape(rectShape, startPos, sf::Color::Yellow);
-    rectShape.setPosition(startPos);
-    rectShape.setScale(0.5, 0.5);
-    rectShape.setOrigin(AssetManager::GetTexture("Images/275104-arrows.png").getSize().x*0.5f, AssetManager::GetTexture("Images/275104-arrows.png").getSize().y*0.9);
-    //rectShape.setTexture(&pacmanTexture);
+    sf::Vector2f startPos = sf::Vector2f(800, 500);
 
-    sf::Sprite PISTA = sf::Sprite(AssetManager::GetTexture("Images/RACE.jpeg"));
-    PISTA.setScale(3, 3);
+   
+    bool* keys = new bool [256];
+    
+    for(int i = 0; i<256; i++)
+        keys[i]=false;
     
     auto wSize = window.getSize();
     sf::View view(sf::FloatRect(0, 0, wSize.x, wSize.y));
     
-    sf::Vector2f dir;
     view.setCenter(startPos);
-    
     window.setView(view);
     
-    bool keys [256] = {false};
+    Player* player = new Player(startPos, manager);
+    Enemy* IA = new Enemy(startPos, manager);
+    
+    sf::Sprite PISTA = sf::Sprite(AssetManager::GetTexture("Images/RACE.jpeg"));
+    PISTA.setScale(3, 3);
+    
+    player->setKeys(keys);
+    
     sf::Event event;
-    float dtAsSeconds;
+    float* dtAsSeconds = new float[1];
+    player->setTime(dtAsSeconds);
     
     while (window.isOpen())
     {
@@ -73,7 +77,7 @@ int main(int argc, char** argv) {
         deltaTime = clock.restart();
         elapsedTime += deltaTime;
         
-        dtAsSeconds = deltaTime.asSeconds();
+        dtAsSeconds[0] = deltaTime.asSeconds();
         
         while (window.pollEvent(event))
         {
@@ -101,37 +105,11 @@ int main(int argc, char** argv) {
         }
         
         //Actualizar escena
-            
-        //       Q: 16
-        //  Arriba: 73   |  W: 22
-        //   Abajo: 74   |  S: 18
-        //     Izq: 71   |  A: 0
-        // Derecha: 72   |  D: 3
+                    
+        player->movement();
+        IA->logic();
         
-        
-        
-        if(SPEED > 0 && (keys[74] || keys[18])){           //ABAJO
-            SPEED -= 10;
-        }
-        else if(SPEED < MAXSPEED && (keys[73] || keys[22])){      //ARRIBA
-            SPEED += 10;
-        }
-       
-        
-        if(keys[71] || keys[0]){       //IZQUIERDA
-            rectShape.rotate(-ROTATION*dtAsSeconds*SPEED*(1/MAXSPEED));
-        }     
-        else if(keys[72] || keys[3]){       //DERECHA
-            rectShape.rotate(ROTATION*dtAsSeconds*SPEED*(1/MAXSPEED));
-        }        
-        
-        std::cout << rectShape.getRotation() << std::endl;
-        dir = sf::Vector2f(sin(rectShape.getRotation()*PI/180), -cos(rectShape.getRotation()*PI/180));
-        dir *= SPEED*dtAsSeconds;
-        
-        rectShape.move(dir);
-        
-        view.setCenter(rectShape.getPosition());
+        view.setCenter(player->getCar().getPosition());
         window.setView(view);
         //Renderizar ciclo
         
@@ -139,7 +117,8 @@ int main(int argc, char** argv) {
             
         window.clear();
         window.draw(PISTA);
-        window.draw(rectShape);
+        window.draw(player->getCar());
+        window.draw(IA->getCar());
         
         window.display();
         window.setMouseCursorVisible(false);

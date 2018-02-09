@@ -11,14 +11,15 @@
  * Created on 6 de febrero de 2018, 22:17
  */
 
+#include <SFML/Graphics/Transformable.hpp>
+
 #include "Enemy.h"
 
-Enemy::Enemy() {
+Enemy::Enemy(sf::Vector2f startPos, AssetManager manager) {
+    Car::car = sf::Sprite( AssetManager::GetTexture("Images/275104-arrows.png") );
+    car.setPosition(startPos);
 }
 
-Enemy::Enemy(const Enemy& orig) {
+void Enemy::logic(){
+    car.move(5, 5);
 }
-
-Enemy::~Enemy() {
-}
-

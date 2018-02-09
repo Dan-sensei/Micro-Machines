@@ -36,8 +36,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/AssetManager.o \
+	${OBJECTDIR}/Car.o \
 	${OBJECTDIR}/Collect.o \
 	${OBJECTDIR}/Enemy.o \
+	${OBJECTDIR}/Player.o \
 	${OBJECTDIR}/main.o
 
 
@@ -70,6 +72,11 @@ ${OBJECTDIR}/AssetManager.o: AssetManager.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AssetManager.o AssetManager.cpp
 
+${OBJECTDIR}/Car.o: Car.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Car.o Car.cpp
+
 ${OBJECTDIR}/Collect.o: Collect.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -79,6 +86,11 @@ ${OBJECTDIR}/Enemy.o: Enemy.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Enemy.o Enemy.cpp
+
+${OBJECTDIR}/Player.o: Player.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Player.o Player.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
