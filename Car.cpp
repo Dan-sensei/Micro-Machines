@@ -20,6 +20,7 @@ Car::Car(const Car& orig) {
 }
 
 Car::~Car() {
+
 }
 
 sf::Sprite Car::getCar(){

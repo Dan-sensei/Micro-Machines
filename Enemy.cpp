@@ -15,7 +15,7 @@
 
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Vector2f startPos, AssetManager manager) {
+Enemy::Enemy(sf::Vector2f startPos) {
     Car::car = sf::Sprite( AssetManager::GetTexture("Images/275104-arrows.png") );
     car.setPosition(startPos);
 }

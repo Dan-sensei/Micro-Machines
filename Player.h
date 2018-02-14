@@ -25,7 +25,7 @@ private:
     float MAXSPEED = 1000;
     bool* keys = new bool [256];
 public:
-    Player(sf::Vector2f startPos, AssetManager manager);
+    Player(sf::Vector2f startPos);
     void movement();
     void setKeys(bool* k);
 };

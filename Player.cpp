@@ -13,7 +13,7 @@
 
 #include "Player.h"
 
-Player::Player(sf::Vector2f startPos, AssetManager manager) {
+Player::Player(sf::Vector2f startPos) {
     Car::car = sf::Sprite( AssetManager::GetTexture("Images/275104-arrows.png") );
     car.setScale(0.5, 0.5);
     car.setOrigin(AssetManager::GetTexture("Images/275104-arrows.png").getSize().x*0.5f, AssetManager::GetTexture("Images/275104-arrows.png").getSize().y*0.9);
@@ -38,14 +38,12 @@ void Player::movement() {
 
 
     if(keys[71] || keys[0]){       //IZQUIERDA
-        //std::cout <<"DTASSECONDS "<< dtAsSeconds << std::endl;
         car.rotate(-ROTATION*dtAsSeconds[0]*SPEED*(1/MAXSPEED));
     }     
     else if(keys[72] || keys[3]){       //DERECHA
         car.rotate(ROTATION*dtAsSeconds[0]*SPEED*(1/MAXSPEED));
     }        
     
-    //std::cout << "dir " << car.getRotation()*PI/180 << " " << dir.y << std::endl;
     dir = sf::Vector2f(sin(car.getRotation()*PI/180), -cos(car.getRotation()*PI/180));
     dir *= SPEED*dtAsSeconds[0];
 

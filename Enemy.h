@@ -20,7 +20,7 @@
 
 class Enemy : public Car{
 public:
-    Enemy(sf::Vector2f startPos, AssetManager manager);
+    Enemy(sf::Vector2f startPos);
     void logic();
 };
 
