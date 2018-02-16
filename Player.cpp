@@ -14,10 +14,18 @@
 #include "Player.h"
 
 Player::Player(sf::Vector2f startPos) {
-    Car::car = sf::Sprite( AssetManager::GetTexture("Images/275104-arrows.png") );
+    vertex = new sf::Vector2f[4];
+    size = AssetManager::GetTexture("Images/player.jpg").getSize();
+    Car::car = sf::Sprite( AssetManager::GetTexture("Images/player.jpg") );
     car.setScale(0.5, 0.5);
-    car.setOrigin(AssetManager::GetTexture("Images/275104-arrows.png").getSize().x*0.5f, AssetManager::GetTexture("Images/275104-arrows.png").getSize().y*0.9);
+    car.setOrigin(size.x*0.5f, size.y);
     car.setPosition(startPos);
+    
+    vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
+    vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)+cos(car.getRotation()*PI/180) * size.y);
+    vertex[2] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y + cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5)+cos(car.getRotation()*PI/180) * size.y);
+    vertex[3] = sf::Vector2f(car.getPosition().x + cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5));
+
 }
 
 void Player::movement() {
@@ -48,8 +56,24 @@ void Player::movement() {
     dir *= SPEED*dtAsSeconds[0];
 
     car.move(dir);
+    
+    vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
+    vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)+cos(car.getRotation()*PI/180) * size.y);
+    vertex[2] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y + cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5)+cos(car.getRotation()*PI/180) * size.y);
+    vertex[3] = sf::Vector2f(car.getPosition().x + cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5));
 }
 
 void Player::setKeys(bool* k){
     keys=k;
+}
+
+void Player::setPos(sf::Vector2f pos){
+    
+    //Origin 66
+    
+    float x =  car.getPosition().x -pos.x;
+    float y =  car.getPosition().y -pos.y ;
+    
+    car.setPosition(pos.x, pos.y);
+    SPEED*=0.3;
 }

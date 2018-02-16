@@ -38,14 +38,17 @@ private:
     sf::Color Dark;
     sf::Color Light;
     
+    sf::Vector2f previousPosition;
+    
 public:
     Game();
     Game(const Game& orig);
     virtual ~Game();
     
-    void go();    
+    void go();   
     
 private:
+    bool collides();
     void handleEvents();
     void update();
     void render();

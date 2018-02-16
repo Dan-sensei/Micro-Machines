@@ -22,12 +22,13 @@ class Player : public Car {
 private:
     sf::Vector2f dir;
     float AC = 17;
-    float MAXSPEED = 1000;
+    float MAXSPEED = 800;
     bool* keys = new bool [256];
 public:
     Player(sf::Vector2f startPos);
     void movement();
     void setKeys(bool* k);
+    void setPos(sf::Vector2f pos);
 };
 
 #endif /* PLAYER_H */
