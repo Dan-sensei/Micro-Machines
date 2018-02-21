@@ -77,37 +77,37 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: ${OBJECTFILES}
 ${OBJECTDIR}/AssetManager.o: AssetManager.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AssetManager.o AssetManager.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AssetManager.o AssetManager.cpp
 
 ${OBJECTDIR}/Car.o: Car.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Car.o Car.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Car.o Car.cpp
 
 ${OBJECTDIR}/Collect.o: Collect.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Collect.o Collect.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Collect.o Collect.cpp
 
 ${OBJECTDIR}/Enemy.o: Enemy.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Enemy.o Enemy.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Enemy.o Enemy.cpp
 
 ${OBJECTDIR}/Game.o: Game.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Game.o Game.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Game.o Game.cpp
 
 ${OBJECTDIR}/Player.o: Player.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Player.o Player.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Player.o Player.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I/usr/include/SFML -I../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

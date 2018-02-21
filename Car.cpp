@@ -30,7 +30,7 @@ void Car::setTime(float* s){
     dtAsSeconds = s;
 }
 
-sf::Vector2f* Car::getVertex(){
+sf::Vector2u* Car::getVertex(){
     return vertex;
 }
 

@@ -16,8 +16,10 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
+#include <iostream>
 #include "Player.h"
 #include "Enemy.h"
+#include <math.h>
 
 class Game {
 private:
@@ -34,11 +36,14 @@ private:
     sf::Time deltaTime;
     sf::Time elapsedTime;
     
-    sf::RectangleShape* hitbox;
+    //sf::RectangleShape* hitbox;
+    sf::Sprite Cool_Map;
+    sf::Image collision;
     sf::Color Dark;
     sf::Color Light;
     
     sf::Vector2f previousPosition;
+    
     
 public:
     Game();

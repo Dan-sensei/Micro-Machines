@@ -20,6 +20,10 @@ using namespace std;
  * 
  */
 
+void i(){
+    
+}
+
 int main(int argc, char** argv) {
 
     Game game;

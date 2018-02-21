@@ -29,7 +29,7 @@ protected:
     float ROTATION = 300;
     const float PI = 3.14159265;
     float* dtAsSeconds = new float[1];
-    sf::Vector2f* vertex;
+    sf::Vector2u* vertex;
     sf::Vector2u size;
     
 public:
@@ -38,7 +38,7 @@ public:
     virtual ~Car();
     void setTime(float* s);
     sf::Sprite getCar();
-    sf::Vector2f* getVertex();
+    sf::Vector2u* getVertex();
 };
 
 #endif /* CAR_H */
