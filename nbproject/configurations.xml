@@ -49,8 +49,8 @@
       <compileType>
         <ccTool>
           <incDir>
+            <pElem>/usr/include/c++/7.3.0</pElem>
             <pElem>/usr/include/SFML</pElem>
-            <pElem>../build/include</pElem>
           </incDir>
         </ccTool>
         <linkerTool>

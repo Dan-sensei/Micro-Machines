@@ -16,7 +16,6 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
-#include <iostream>
 #include "Player.h"
 #include "Enemy.h"
 #include <math.h>
@@ -37,13 +36,17 @@ private:
     sf::Time elapsedTime;
     
     //sf::RectangleShape* hitbox;
-    sf::Sprite Cool_Map;
-    sf::Image collision;
     sf::Color Dark;
     sf::Color Light;
     
     sf::Vector2f previousPosition;
     
+    struct hitbox{
+        sf::RectangleShape figure;
+        sf::Vector2f* vertex;
+    };
+    
+    hitbox* hit;
     
 public:
     Game();
@@ -57,7 +60,11 @@ private:
     void handleEvents();
     void update();
     void render();
-    
+    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex);
+    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
+    bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
+    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos);
+    float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
 };
 
 #endif /* GAME_H */
