@@ -30,6 +30,9 @@ private:
     float* dtAsSeconds;
     Player* player;
     Enemy* IA;
+    Enemy* IA2;
+    Enemy* IA3;
+    Enemy* IA4;
     
     AssetManager manager;
     sf::Clock clock;
@@ -43,17 +46,16 @@ private:
     sf::Vector2f previousPosition;
     const float PI = 3.14159265;
     
-    struct hitbox{
+    struct item{
         sf::RectangleShape figure;
-        sf::ConvexShape convex;
         sf::Vector2f* vertex;
-        int checkVertex;
         int sx;
         int sy;
-        int nv;
+        float newRotation;
     };
     
-    hitbox* hit;
+    item hit [15];
+    item control [12];
     
     struct MTV{
         sf::Vector2f axis;
@@ -70,14 +72,15 @@ public:
     void go();   
     
 private:
-    bool collides(sf::Vector2f* vertex, int n, int nv);
+    bool collides(sf::Vector2f* target, sf::Vector2f* vertex);
     void handleEvents();
     void update();
     void render();
-    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex, int n);
-    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex, int nv);
+    void rendercontrol();
+    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex);
+    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
     bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
-    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, int nv);
+    item createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, bool center, float rot);
     float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
 };
 

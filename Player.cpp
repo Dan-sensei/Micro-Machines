@@ -18,9 +18,11 @@ Player::Player(sf::Vector2f startPos) {
     size = AssetManager::GetTexture("Images/HERO.jpg").getSize();
     Car::car = sf::Sprite( AssetManager::GetTexture("Images/HERO.jpg") );
     
+    MAXSPEED = 800;
+    
     car.setOrigin(size.x*0.5f, size.y);
     car.setPosition(startPos);
-    car.setRotation(135);
+    car.setRotation(0);
     
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
     vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
@@ -100,7 +102,7 @@ void Player::setPos(sf::Vector2f pos, sf::Vector2f axis){
         //if(abs(dot) < 0.72)
           //  car.setRotation(angle);
         
-        SPEED -= SPEED*abs(dot)*0.3;
+        SPEED -= SPEED*abs(dot)*0.08;
          
     
     

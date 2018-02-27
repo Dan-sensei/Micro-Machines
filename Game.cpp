@@ -23,9 +23,9 @@ Game::Game()
 {
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
-    window.setVerticalSyncEnabled(false);
+
      //sf::Vector2f startPos = sf::Vector2f(-2000, -20);
-    sf::Vector2f startPos = sf::Vector2f(5244.68, 400);
+    sf::Vector2f startPos = sf::Vector2f(150, 1800);
     //sf::Vector2f startPos = sf::Vector2f(0, 0);
 
     
@@ -34,7 +34,7 @@ Game::Game()
     Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/New.jpg")); 
 
     view.setCenter(startPos);
-    view.zoom(7);
+    view.zoom(1.2);
     window.setView(view);   
     
     keys = new bool[256];
@@ -44,84 +44,53 @@ Game::Game()
     dtAsSeconds = new float[1];
     
     player = new Player(startPos);
-    IA = new Enemy(startPos);
+    IA = new Enemy(sf::Vector2f(80, 1500), 750);
+    IA2 = new Enemy(sf::Vector2f(150, 1700), 700);
+    IA3 = new Enemy(sf::Vector2f(180, 1650), 680);
+    IA4 = new Enemy(sf::Vector2f(200, 1420), 500);
     
     player->setKeys(keys);
     player->setTime(dtAsSeconds);
     IA->setTime(dtAsSeconds);
+    IA2->setTime(dtAsSeconds);
+    IA3->setTime(dtAsSeconds);
+    IA4->setTime(dtAsSeconds);
     
     Light = sf::Color(247, 233, 212);
     Dark = sf::Color(41, 39, 34);
+
+    //HITBOX DEL MAPA
+                         //    TAMAÑO                    POSICION       ROTACION X  Y  FACE
+    hit[0] = createHitbox(sf::Vector2f(1000, 3000), sf::Vector2f(-1000, 800), 0, 1, 1, false, 0);
+    hit[1] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(474, -820), 45, 1, 1, false, 0);   //474 o 475
+    hit[2] = createHitbox(sf::Vector2f(5000, 1000), sf::Vector2f(800, -1000), 0, 1, 1, false, 0);
+    hit[3] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(7366, 250), 135, -1, 1, false, 0);  //7366 o 7365
+    hit[4] = createHitbox(sf::Vector2f(1000, 3200), sf::Vector2f(6403, 550), 0, -1, 1, false, 0);
+    hit[5] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(6800, 3128), 45, -1, -1, false, 0);  //Cambiar la Y
+    hit[6] = createHitbox(sf::Vector2f(3800, 1000), sf::Vector2f(2000, 4352), 0, 1, -1, false, 0);
+    hit[7] = createHitbox(sf::Vector2f(2200, 1200), sf::Vector2f(-78, 3286), 0, 1, -1, false, 0);
+    hit[8] = createHitbox(sf::Vector2f(4752, 1394), sf::Vector2f(583, 1308), 0, -1, 1, false, 0);
+    hit[9] = createHitbox(sf::Vector2f(1025.304833, 800), sf::Vector2f(583, 1308), -45, -1, -1, false, 0);
+    hit[10] = createHitbox(sf::Vector2f(4152, 1000), sf::Vector2f(1308, 583), 0, 1, -1, false, 0); 
+    hit[11] = createHitbox(sf::Vector2f(509.1168825, 800), sf::Vector2f(5460, 583), 45, 1, -1, false, 0);
+    hit[12] = createHitbox(sf::Vector2f(485, 2341), sf::Vector2f(5335, 943), 0, 1, 1, false, 0); 
+    hit[13] = createHitbox(sf::Vector2f(685.8935778, 500), sf::Vector2f(5820, 3284), 135, 1, 1, false, 0);   
+    hit[14] = createHitbox(sf::Vector2f(2630, 1067), sf::Vector2f(2705, 2702), 0, -1, 1, false, 0);
     
-    hit = new Game::hitbox [10];
-    hit[0] = createHitbox(sf::Vector2f(1000, 3000), sf::Vector2f(-1000, 800), 0, 1, 1, 4);
-    hit[1] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(474, -820), 45, 1, 1, 4);   //474 o 475
-    hit[2] = createHitbox(sf::Vector2f(5000, 1000), sf::Vector2f(800, -1000), 0, 1, 1, 4);
-    hit[3] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(7366, 250), 135, -1, 1, 4);  //7366 o 7365
-    hit[4] = createHitbox(sf::Vector2f(1000, 3200), sf::Vector2f(6403, 550), 0, -1, 1, 4);
-    hit[5] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(6800, 3128), 45, -1, -1, 4);  //Cambiar la Y
-    hit[6] = createHitbox(sf::Vector2f(3800, 1000), sf::Vector2f(2000, 4352), 0, 1, -1, 4);
-    hit[7] = createHitbox(sf::Vector2f(2200, 1200), sf::Vector2f(-78, 3286), 0, 1, -1, 4);
-    
-    hit[3].figure.setFillColor(sf::Color::Green);
-    
-    std::cout << "V1: (" << hit[1].vertex[0].x << ", " << hit[1].vertex[0].y << ")" << std::endl;
-    std::cout << "V2: (" << hit[1].vertex[1].x << ", " << hit[1].vertex[1].y << ")" << std::endl;
-    std::cout << "V3: (" << hit[1].vertex[2].x << ", " << hit[1].vertex[2].y << ")" << std::endl;
-    std::cout << "V4: (" << hit[1].vertex[3].x << ", " << hit[1].vertex[3].y << ")" << std::endl << std::endl;
-    
-    std::cout << "V1: (" << hit[3].vertex[0].x << ", " << hit[3].vertex[0].y << ")" << std::endl;
-    std::cout << "V2: (" << hit[3].vertex[1].x << ", " << hit[3].vertex[1].y << ")" << std::endl;
-    std::cout << "V3: (" << hit[3].vertex[2].x << ", " << hit[3].vertex[2].y << ")" << std::endl;
-    std::cout << "V4: (" << hit[3].vertex[3].x << ", " << hit[3].vertex[3].y << ")" << std::endl;
-    
-    sf::ConvexShape eight;
-    eight.setPointCount(6);
-    eight.setPoint(0, sf::Vector2f(583, 2702));
-    eight.setPoint(1, sf::Vector2f(583, 1308));
-    eight.setPoint(2, sf::Vector2f(1308, 583));
-    eight.setPoint(3, sf::Vector2f(5460, 583));
-    eight.setPoint(4, sf::Vector2f(5820, 943));
-    eight.setPoint(5, sf::Vector2f(5820, 2702));
-    eight.setFillColor(sf::Color::Cyan);    
-    hit[8].convex = eight;
-    hit[8].vertex = new sf::Vector2f [6];
-    hit[8].vertex[0] = sf::Vector2f(583, 2702);
-    hit[8].vertex[1] = sf::Vector2f(583, 1308);
-    hit[8].vertex[2] = sf::Vector2f(1308, 583);
-    hit[8].vertex[3] = sf::Vector2f(5460, 583);
-    hit[8].vertex[4] = sf::Vector2f(5820, 943);
-    hit[8].vertex[5] = sf::Vector2f(5820, 2702);
-    hit[8].nv = 6;
-    hit[8].checkVertex = 4;
-    
-    sf::ConvexShape nine;
-    nine.setPointCount(5);
-    nine.setPoint(0, sf::Vector2f(5820, 2500));
-    nine.setPoint(1, sf::Vector2f(5820, 3284));
-    nine.setPoint(2, sf::Vector2f(5335, 3769));
-    nine.setPoint(3, sf::Vector2f(2705, 3769));
-    nine.setPoint(4, sf::Vector2f(2705, 2500));
-    nine.setFillColor(sf::Color::Magenta);    
-    hit[9].convex = nine;
-    hit[9].vertex = new sf::Vector2f [5];
-    hit[9].vertex[0] = sf::Vector2f(5820, 2500);
-    hit[9].vertex[1] = sf::Vector2f(5820, 3284);
-    hit[9].vertex[2] = sf::Vector2f(5335, 3769);
-    hit[9].vertex[3] = sf::Vector2f(2705, 3769);
-    hit[9].vertex[4] = sf::Vector2f(2705, 2500);
-    hit[9].nv = 5;
-    hit[9].checkVertex = 3;
-    
-    
-    
-    /*
-    std::cout << "Vertex 1: (" << hit[2].vertex[0].x << ", " << hit[2].vertex[0].y << ")" << std::endl;
-    std::cout << "Vertex 2: (" << hit[2].vertex[1].x << ", " << hit[2].vertex[1].y << ")" << std::endl;
-    std::cout << "Vertex 3: (" << hit[2].vertex[2].x << ", " << hit[2].vertex[2].y << ")" << std::endl;
-    std::cout << "Vertex 4: (" << hit[2].vertex[3].x << ", " << hit[2].vertex[3].y << ")" << std::endl;
-     */
-    
+    //PUNTOS DE CONTROL
+    control[0] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 1308), 0, 1, 1, true, 45);
+    control[1] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(1308, 291.5), 0, 1, 1, true, 45);
+    control[2] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5460, 291.5), 0, 1, 1, true, 45);
+    control[3] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 943), 0, 1, 1, true, 45);
+    control[4] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 3284), 0, 1, 1, true, 45);
+    control[5] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5335, 4060.5), 0, 1, 1, true, 45);
+    control[6] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2705, 4060.5), 0, 1, 1, true, 45);
+    control[7] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3769), 0, 1, 1, true, 45);
+    control[8] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3286), 0, 1, 1, true, -45);
+    control[9] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2121, 2994.5), 0, 1, 1, true, -45);
+    control[10] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(583, 2994.5), 0, 1, 1, true, 45);
+    control[11] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 2702), 0, 1, 1, true, 45);
+
 }
 
 Game::~Game() {
@@ -170,12 +139,55 @@ void Game::update(){
     dtAsSeconds[0] = deltaTime.asSeconds();
     //std::cout<< "Vertex 1: " << player->getVertex()[1].x << ", " << player->getVertex()[1].y << std::endl;
     player->movement();
+
+    for(int i=0; i< 12; i++){
+        
+        if(IA->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA->getFlag(i)){
+            IA->setDesiredRotation(control[i].newRotation);
+            IA->setCheckPoint(i, true);
+            std::cout << "IA COLLISION!" <<std::endl;
+            break;
+        }
+        else if(!(IA->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
+            IA->setCheckPoint(i, false);
+        
+        if(IA2->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA2->getFlag(i)){
+            IA2->setDesiredRotation(control[i].newRotation);
+            IA2->setCheckPoint(i, true);
+            std::cout << "IA COLLISION!" <<std::endl;
+            break;
+        }
+        else if(!(IA2->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
+            IA2->setCheckPoint(i, false);
+        
+        if(IA3->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA3->getFlag(i)){
+            IA3->setDesiredRotation(control[i].newRotation);
+            IA3->setCheckPoint(i, true);
+            std::cout << "IA COLLISION!" <<std::endl;
+            break;
+        }
+        else if(!(IA3->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
+            IA3->setCheckPoint(i, false);
+        
+        if(IA4->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA4->getFlag(i)){
+            IA4->setDesiredRotation(control[i].newRotation);
+            IA4->setCheckPoint(i, true);
+            std::cout << "IA COLLISION!" <<std::endl;
+            break;
+        }
+        else if(!(IA4->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
+            IA4->setCheckPoint(i, false);
+    }
+
     IA->logic();
+    IA2->logic();
+    IA3->logic();
+    IA4->logic();
     
-    for(int i = 0; i<10 ; i++){
+    for(int i = 0; i<15 ; i++){
         //std::cout << "Collision! ("<<player->getCar().getPosition().x << ", "<<player->getCar().getPosition().y<<")" << std::endl;
         //std::cout << "Previous ! ("<< previousPosition.x << ", "<< previousPosition.y<<")" << std::endl;
-        if(collides(hit[i].vertex, hit[i].checkVertex, hit[i].nv)){
+        if(collides(player->getVertex(), hit[i].vertex)){
             std::cout << "COLLIDES"<<std::endl;   
             
             mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
@@ -188,9 +200,7 @@ void Game::update(){
         }
     }
        
-        
-         
-       
+   
     view.setCenter(player->getCar().getPosition());
     window.setView(view);
     
@@ -200,25 +210,24 @@ void Game::update(){
 void Game::render(){
     window.clear(Dark);
     window.draw(Cool_Map);
-    //window.draw(hit[0].figure);
-    window.draw(hit[1].figure);
-    //window.draw(hit[2].figure);
-    window.draw(hit[3].figure);
-   // window.draw(hit[4].figure);
-    window.draw(hit[5].figure);
-    window.draw(hit[6].figure);
-    window.draw(hit[7].figure);
-    window.draw(hit[8].convex);
-    window.draw(hit[9].convex);
+    rendercontrol();
     
     window.draw(player->getCar());
     window.draw(IA->getCar());
+    window.draw(IA2->getCar());
+    window.draw(IA3->getCar());
+    window.draw(IA4->getCar());
     
     window.display();
 }
 
+void Game::rendercontrol(){
+    for(int i=0; i< 12; i++)
+        window.draw(control[i].figure);
+}
+
 //Separation Axis Algorithm - Guía seguida: http://www.dyn4j.org/2010/01/sat/
-bool Game::collides(sf::Vector2f* vertex, int n, int nv){
+bool Game::collides(sf::Vector2f* target, sf::Vector2f* vertex){
     
     mtv.axis = sf::Vector2f(0, 0);
     mtv.distance = 0;
@@ -227,15 +236,15 @@ bool Game::collides(sf::Vector2f* vertex, int n, int nv){
     sf::Vector2f MINIMUM;
     double tmp;
     std::vector<sf::Vector2f> finalEdges;
-    getNormals(finalEdges, player->getVertex(), 3);
-    getNormals(finalEdges, vertex, n);
+    getNormals(finalEdges, target);
+    getNormals(finalEdges, vertex);
     
     sf::Vector2<double> pPlayer;
     sf::Vector2<double> pHitbox;
     
     for(std::vector<sf::Vector2f>::iterator edge = finalEdges.begin(); edge != finalEdges.end(); ++edge){
-        pPlayer = projection(*edge, player->getVertex(), 4);
-        pHitbox = projection(*edge, vertex, nv);
+        pPlayer = projection(*edge, player->getVertex());
+        pHitbox = projection(*edge, vertex);
         
         if(!ItOverlaps(pPlayer, pHitbox)){
            // std::cout << "NOPE" << std::endl;
@@ -256,7 +265,7 @@ bool Game::collides(sf::Vector2f* vertex, int n, int nv){
     return true;
 }
 
-void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex, int n){
+void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex){
     
     sf::Vector2f normal;
     sf::Vector2f first;
@@ -264,7 +273,7 @@ void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* verte
     sf::Vector2f edge;
     
     double unit;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < 2; i++){
         first = vertex[i];
         next = vertex[i+1==4 ? 0 : i+1];
         edge = sf::Vector2f(next.x - first.x, next.y - first.y);
@@ -275,7 +284,7 @@ void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* verte
     }
 }
 
-sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex, int nv){
+sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex){
     sf::Vector2<double> p;
     
     double min;
@@ -284,7 +293,7 @@ sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex, in
     min = edge.x * vertex[0].x + edge.y * vertex[0].y;
     max= min;
     //std::cout << "NV: " << nv << std::endl;
-    for(int i=1; i< nv; i++){   
+    for(int i=1; i< 4; i++){   
         tmp = edge.x * vertex[i].x + edge.y * vertex[i].y;
         if(tmp>=max)
             max = tmp;
@@ -310,13 +319,19 @@ float Game::overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2){
     return x;
 }
 
-Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, int nv){
-    Game::hitbox h;
+Game::item Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, bool center, float rot){
+    Game::item h;
     h.figure.setSize(wallSize);
+    
+    
     h.figure.setRotation(rotation);
-    h.figure.setFillColor(sf::Color::Red);
     h.figure.setPosition(pos);
     
+    if(center){
+        
+        h.figure.setOrigin(wallSize.x/2, wallSize.y/2);
+    std::cout << "Origin: "<< h.figure.getPosition().x << ", "<<h.figure.getPosition().y << std::endl;
+    }
     h.vertex = new sf::Vector2f [4];
     h.vertex[0]=pos;
     if(rotation == 0){   
@@ -330,9 +345,8 @@ Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float r
         h.vertex[3] = sf::Vector2f(h.vertex[0].x-sin(rotation*PI/180)*wallSize.y, h.vertex[0].y + cos(rotation*PI/180)*wallSize.y);
     }
     
-    h.nv = nv;
     h.sx = sx;
     h.sy = sy;
-    h.checkVertex = 2;
+    h.newRotation = rot;
     return h;
 }

@@ -34,3 +34,10 @@ sf::Vector2f* Car::getVertex(){
     return vertex;
 }
 
+void Car::incrementPosition(float pos){
+    position += pos;
+}
+
+float Car::getPosition(){
+    return position;
+}

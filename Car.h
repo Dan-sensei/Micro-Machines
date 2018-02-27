@@ -22,7 +22,7 @@
 class Car {
     
 protected:
-    float MAXSPEED = 800;
+    float MAXSPEED;
     sf::Sprite car;
     float AC = 10;
     float SPEED = 0;
@@ -31,6 +31,7 @@ protected:
     float* dtAsSeconds = new float[1];
     sf::Vector2f* vertex;
     sf::Vector2u size;
+    float position;
     
 public:
     Car();
@@ -39,6 +40,8 @@ public:
     void setTime(float* s);
     sf::Sprite getCar();
     sf::Vector2f* getVertex();
+    void incrementPosition(float pos);
+    float getPosition();
 };
 
 #endif /* CAR_H */
