@@ -48,6 +48,9 @@ private:
         sf::ConvexShape convex;
         sf::Vector2f* vertex;
         int checkVertex;
+        int sx;
+        int sy;
+        int nv;
     };
     
     hitbox* hit;
@@ -67,14 +70,14 @@ public:
     void go();   
     
 private:
-    bool collides(sf::Vector2f* vertex, int n);
+    bool collides(sf::Vector2f* vertex, int n, int nv);
     void handleEvents();
     void update();
     void render();
     void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex, int n);
-    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
+    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex, int nv);
     bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
-    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation);
+    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, int nv);
     float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
 };
 

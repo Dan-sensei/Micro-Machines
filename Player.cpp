@@ -102,9 +102,6 @@ void Player::setPos(sf::Vector2f pos, sf::Vector2f axis){
         
         SPEED -= SPEED*abs(dot)*0.3;
          
-        
-
-    
     
     
    // SPEED*=0.3;

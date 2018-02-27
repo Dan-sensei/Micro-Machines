@@ -25,7 +25,7 @@ Game::Game()
     window.setMouseCursorVisible(false);
     window.setVerticalSyncEnabled(false);
      //sf::Vector2f startPos = sf::Vector2f(-2000, -20);
-    sf::Vector2f startPos = sf::Vector2f(200, 1081.55);
+    sf::Vector2f startPos = sf::Vector2f(5244.68, 400);
     //sf::Vector2f startPos = sf::Vector2f(0, 0);
 
     
@@ -34,7 +34,7 @@ Game::Game()
     Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/New.jpg")); 
 
     view.setCenter(startPos);
-    view.zoom(1);
+    view.zoom(7);
     window.setView(view);   
     
     keys = new bool[256];
@@ -54,24 +54,26 @@ Game::Game()
     Dark = sf::Color(41, 39, 34);
     
     hit = new Game::hitbox [10];
-    hit[0] = createHitbox(sf::Vector2f(1000, 3000), sf::Vector2f(-1000, 800), 0);
-    hit[1] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(474, -820), 45);   //474 o 475
-    hit[2] = createHitbox(sf::Vector2f(5000, 1000), sf::Vector2f(800, -1000), 0);
-    hit[3] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(7366, 250), 135);  //7366 o 7365
-    hit[4] = createHitbox(sf::Vector2f(1000, 3200), sf::Vector2f(6403, 550), 0);
-    hit[5] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(6800, 3128), 45);  //Cambiar la Y
-    hit[6] = createHitbox(sf::Vector2f(3800, 1000), sf::Vector2f(2000, 4352), 0);
-    hit[7] = createHitbox(sf::Vector2f(2200, 1200), sf::Vector2f(-78, 3286), 0);
+    hit[0] = createHitbox(sf::Vector2f(1000, 3000), sf::Vector2f(-1000, 800), 0, 1, 1, 4);
+    hit[1] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(474, -820), 45, 1, 1, 4);   //474 o 475
+    hit[2] = createHitbox(sf::Vector2f(5000, 1000), sf::Vector2f(800, -1000), 0, 1, 1, 4);
+    hit[3] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(7366, 250), 135, -1, 1, 4);  //7366 o 7365
+    hit[4] = createHitbox(sf::Vector2f(1000, 3200), sf::Vector2f(6403, 550), 0, -1, 1, 4);
+    hit[5] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(6800, 3128), 45, -1, -1, 4);  //Cambiar la Y
+    hit[6] = createHitbox(sf::Vector2f(3800, 1000), sf::Vector2f(2000, 4352), 0, 1, -1, 4);
+    hit[7] = createHitbox(sf::Vector2f(2200, 1200), sf::Vector2f(-78, 3286), 0, 1, -1, 4);
     
-
-    hit[1].vertex[0]=sf::Vector2f(474, -820);
-    hit[1].vertex[1]=sf::Vector2f(1065,0);
-    hit[1].vertex[2]=sf::Vector2f(0, 1065);
+    hit[3].figure.setFillColor(sf::Color::Green);
     
     std::cout << "V1: (" << hit[1].vertex[0].x << ", " << hit[1].vertex[0].y << ")" << std::endl;
     std::cout << "V2: (" << hit[1].vertex[1].x << ", " << hit[1].vertex[1].y << ")" << std::endl;
     std::cout << "V3: (" << hit[1].vertex[2].x << ", " << hit[1].vertex[2].y << ")" << std::endl;
-    std::cout << "V4: (" << hit[1].vertex[3].x << ", " << hit[1].vertex[3].y << ")" << std::endl;
+    std::cout << "V4: (" << hit[1].vertex[3].x << ", " << hit[1].vertex[3].y << ")" << std::endl << std::endl;
+    
+    std::cout << "V1: (" << hit[3].vertex[0].x << ", " << hit[3].vertex[0].y << ")" << std::endl;
+    std::cout << "V2: (" << hit[3].vertex[1].x << ", " << hit[3].vertex[1].y << ")" << std::endl;
+    std::cout << "V3: (" << hit[3].vertex[2].x << ", " << hit[3].vertex[2].y << ")" << std::endl;
+    std::cout << "V4: (" << hit[3].vertex[3].x << ", " << hit[3].vertex[3].y << ")" << std::endl;
     
     sf::ConvexShape eight;
     eight.setPointCount(6);
@@ -90,7 +92,8 @@ Game::Game()
     hit[8].vertex[3] = sf::Vector2f(5460, 583);
     hit[8].vertex[4] = sf::Vector2f(5820, 943);
     hit[8].vertex[5] = sf::Vector2f(5820, 2702);
-    hit[8].checkVertex = 6;
+    hit[8].nv = 6;
+    hit[8].checkVertex = 4;
     
     sf::ConvexShape nine;
     nine.setPointCount(5);
@@ -107,7 +110,8 @@ Game::Game()
     hit[9].vertex[2] = sf::Vector2f(5335, 3769);
     hit[9].vertex[3] = sf::Vector2f(2705, 3769);
     hit[9].vertex[4] = sf::Vector2f(2705, 2500);
-    hit[9].checkVertex = 5;
+    hit[9].nv = 5;
+    hit[9].checkVertex = 3;
     
     
     
@@ -168,28 +172,25 @@ void Game::update(){
     player->movement();
     IA->logic();
     
-    
-        
     for(int i = 0; i<10 ; i++){
         //std::cout << "Collision! ("<<player->getCar().getPosition().x << ", "<<player->getCar().getPosition().y<<")" << std::endl;
         //std::cout << "Previous ! ("<< previousPosition.x << ", "<< previousPosition.y<<")" << std::endl;
-        if(collides(hit[i].vertex, hit[i].checkVertex)){
+        if(collides(hit[i].vertex, hit[i].checkVertex, hit[i].nv)){
             std::cout << "COLLIDES"<<std::endl;   
             
-            float x = (hit[i].figure.getPosition().x < player->getCar().getPosition().x) ? -1 : 1;
-            float y = (hit[i].figure.getPosition().y < player->getCar().getPosition().y) ? 1 : -1;
-            
-            mtv.axis.x *=x;
-            mtv.axis.y *=y;
+            mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
+            mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
             
             std::cout << "MTV - Axis: " << mtv.axis.x << ", " << mtv.axis.y << std::endl;
             std::cout << "MTV - Overlap: " << mtv.distance << std::endl;
             
-            player->setPos(sf::Vector2f(mtv.distance * mtv.axis.x, mtv.distance * mtv.axis.y), mtv.axis);
+            player->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
         }
     }
+       
         
          
+       
     view.setCenter(player->getCar().getPosition());
     window.setView(view);
     
@@ -203,7 +204,7 @@ void Game::render(){
     window.draw(hit[1].figure);
     //window.draw(hit[2].figure);
     window.draw(hit[3].figure);
-    window.draw(hit[4].figure);
+   // window.draw(hit[4].figure);
     window.draw(hit[5].figure);
     window.draw(hit[6].figure);
     window.draw(hit[7].figure);
@@ -217,7 +218,7 @@ void Game::render(){
 }
 
 //Separation Axis Algorithm - Guía seguida: http://www.dyn4j.org/2010/01/sat/
-bool Game::collides(sf::Vector2f* vertex, int n){
+bool Game::collides(sf::Vector2f* vertex, int n, int nv){
     
     mtv.axis = sf::Vector2f(0, 0);
     mtv.distance = 0;
@@ -233,8 +234,8 @@ bool Game::collides(sf::Vector2f* vertex, int n){
     sf::Vector2<double> pHitbox;
     
     for(std::vector<sf::Vector2f>::iterator edge = finalEdges.begin(); edge != finalEdges.end(); ++edge){
-        pPlayer = projection(*edge, player->getVertex());
-        pHitbox = projection(*edge, vertex);
+        pPlayer = projection(*edge, player->getVertex(), 4);
+        pHitbox = projection(*edge, vertex, nv);
         
         if(!ItOverlaps(pPlayer, pHitbox)){
            // std::cout << "NOPE" << std::endl;
@@ -274,7 +275,7 @@ void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* verte
     }
 }
 
-sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex){
+sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex, int nv){
     sf::Vector2<double> p;
     
     double min;
@@ -282,7 +283,8 @@ sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex){
     double tmp;
     min = edge.x * vertex[0].x + edge.y * vertex[0].y;
     max= min;
-    for(int i=1; i< 4; i++){   
+    //std::cout << "NV: " << nv << std::endl;
+    for(int i=1; i< nv; i++){   
         tmp = edge.x * vertex[i].x + edge.y * vertex[i].y;
         if(tmp>=max)
             max = tmp;
@@ -308,7 +310,7 @@ float Game::overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2){
     return x;
 }
 
-Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation){
+Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, int nv){
     Game::hitbox h;
     h.figure.setSize(wallSize);
     h.figure.setRotation(rotation);
@@ -316,15 +318,21 @@ Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float r
     h.figure.setPosition(pos);
     
     h.vertex = new sf::Vector2f [4];
+    h.vertex[0]=pos;
     if(rotation == 0){   
-        h.vertex[0]=pos;
         h.vertex[1]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y);
         h.vertex[2]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y + wallSize.y);
         h.vertex[3]=sf::Vector2f(h.vertex[0].x, h.vertex[0].y + wallSize.y);
     }
-
+    else{
+        h.vertex[1] = sf::Vector2f(h.vertex[0].x+cos(rotation*PI/180)*wallSize.x, h.vertex[0].y + sin(rotation*PI/180)*wallSize.x);
+        h.vertex[2] = sf::Vector2f(h.vertex[0].x+cos(rotation*PI/180)*wallSize.x - sin(rotation*PI/180)*wallSize.y , h.vertex[0].y +cos(rotation*PI/180)*wallSize.y + sin(rotation*PI/180)*wallSize.x);
+        h.vertex[3] = sf::Vector2f(h.vertex[0].x-sin(rotation*PI/180)*wallSize.y, h.vertex[0].y + cos(rotation*PI/180)*wallSize.y);
+    }
     
-    
-    h.checkVertex = 3;
+    h.nv = nv;
+    h.sx = sx;
+    h.sy = sy;
+    h.checkVertex = 2;
     return h;
 }
