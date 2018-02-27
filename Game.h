@@ -24,6 +24,7 @@ class Game {
 private:
     sf::RenderWindow window;
     sf::View view;
+    sf::Sprite Cool_Map;
     
     bool* keys;
     float* dtAsSeconds;
@@ -43,10 +44,19 @@ private:
     
     struct hitbox{
         sf::RectangleShape figure;
+        sf::ConvexShape convex;
         sf::Vector2f* vertex;
+        int checkVertex;
     };
     
     hitbox* hit;
+    
+    struct MTV{
+        sf::Vector2f axis;
+        double distance;
+        bool check;
+    };
+    MTV mtv;
     
 public:
     Game();
@@ -56,14 +66,14 @@ public:
     void go();   
     
 private:
-    bool collides();
+    bool collides(sf::Vector2f* vertex, int n);
     void handleEvents();
     void update();
     void render();
-    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex);
+    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex, int n);
     sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
     bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
-    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos);
+    hitbox createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation);
     float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
 };
 

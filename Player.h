@@ -28,7 +28,7 @@ public:
     Player(sf::Vector2f startPos);
     void movement();
     void setKeys(bool* k);
-    void setPos(sf::Vector2f pos);
+    void setPos(sf::Vector2f pos, sf::Vector2f axis);
 };
 
 #endif /* PLAYER_H */
