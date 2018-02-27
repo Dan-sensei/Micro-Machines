@@ -25,7 +25,7 @@ Game::Game()
     window.setMouseCursorVisible(false);
     window.setVerticalSyncEnabled(false);
      //sf::Vector2f startPos = sf::Vector2f(-2000, -20);
-    sf::Vector2f startPos = sf::Vector2f(5702, 3500);
+    sf::Vector2f startPos = sf::Vector2f(200, 1081.55);
     //sf::Vector2f startPos = sf::Vector2f(0, 0);
 
     
@@ -62,6 +62,16 @@ Game::Game()
     hit[5] = createHitbox(sf::Vector2f(1000, 2000), sf::Vector2f(6800, 3128), 45);  //Cambiar la Y
     hit[6] = createHitbox(sf::Vector2f(3800, 1000), sf::Vector2f(2000, 4352), 0);
     hit[7] = createHitbox(sf::Vector2f(2200, 1200), sf::Vector2f(-78, 3286), 0);
+    
+
+    hit[1].vertex[0]=sf::Vector2f(474, -820);
+    hit[1].vertex[1]=sf::Vector2f(1065,0);
+    hit[1].vertex[2]=sf::Vector2f(0, 1065);
+    
+    std::cout << "V1: (" << hit[1].vertex[0].x << ", " << hit[1].vertex[0].y << ")" << std::endl;
+    std::cout << "V2: (" << hit[1].vertex[1].x << ", " << hit[1].vertex[1].y << ")" << std::endl;
+    std::cout << "V3: (" << hit[1].vertex[2].x << ", " << hit[1].vertex[2].y << ")" << std::endl;
+    std::cout << "V4: (" << hit[1].vertex[3].x << ", " << hit[1].vertex[3].y << ")" << std::endl;
     
     sf::ConvexShape eight;
     eight.setPointCount(6);
@@ -164,8 +174,7 @@ void Game::update(){
         //std::cout << "Collision! ("<<player->getCar().getPosition().x << ", "<<player->getCar().getPosition().y<<")" << std::endl;
         //std::cout << "Previous ! ("<< previousPosition.x << ", "<< previousPosition.y<<")" << std::endl;
         if(collides(hit[i].vertex, hit[i].checkVertex)){
-            std::cout << "COLLIDES"<<std::endl;
-            
+            std::cout << "COLLIDES"<<std::endl;   
             
             float x = (hit[i].figure.getPosition().x < player->getCar().getPosition().x) ? -1 : 1;
             float y = (hit[i].figure.getPosition().y < player->getCar().getPosition().y) ? 1 : -1;
@@ -180,6 +189,7 @@ void Game::update(){
         }
     }
         
+         
     view.setCenter(player->getCar().getPosition());
     window.setView(view);
     
@@ -189,9 +199,9 @@ void Game::update(){
 void Game::render(){
     window.clear(Dark);
     window.draw(Cool_Map);
-    window.draw(hit[0].figure);
+    //window.draw(hit[0].figure);
     window.draw(hit[1].figure);
-    window.draw(hit[2].figure);
+    //window.draw(hit[2].figure);
     window.draw(hit[3].figure);
     window.draw(hit[4].figure);
     window.draw(hit[5].figure);
@@ -216,7 +226,7 @@ bool Game::collides(sf::Vector2f* vertex, int n){
     sf::Vector2f MINIMUM;
     double tmp;
     std::vector<sf::Vector2f> finalEdges;
-    getNormals(finalEdges, player->getVertex(), n);
+    getNormals(finalEdges, player->getVertex(), 3);
     getNormals(finalEdges, vertex, n);
     
     sf::Vector2<double> pPlayer;
@@ -306,11 +316,15 @@ Game::hitbox Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float r
     h.figure.setPosition(pos);
     
     h.vertex = new sf::Vector2f [4];
-    h.vertex[0]=pos;
-    h.vertex[1]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y);
-    h.vertex[2]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y + wallSize.y);
-    h.vertex[3]=sf::Vector2f(h.vertex[0].x, h.vertex[0].y + wallSize.y);
+    if(rotation == 0){   
+        h.vertex[0]=pos;
+        h.vertex[1]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y);
+        h.vertex[2]=sf::Vector2f(h.vertex[0].x + wallSize.x, h.vertex[0].y + wallSize.y);
+        h.vertex[3]=sf::Vector2f(h.vertex[0].x, h.vertex[0].y + wallSize.y);
+    }
+
     
-    h.checkVertex = 2;
+    
+    h.checkVertex = 3;
     return h;
 }

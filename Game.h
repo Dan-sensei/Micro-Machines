@@ -41,6 +41,7 @@ private:
     sf::Color Light;
     
     sf::Vector2f previousPosition;
+    const float PI = 3.14159265;
     
     struct hitbox{
         sf::RectangleShape figure;
