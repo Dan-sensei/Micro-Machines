@@ -43,7 +43,6 @@ private:
     sf::Color Dark;
     sf::Color Light;
     
-    sf::Vector2f previousPosition;
     const float PI = 3.14159265;
     
     struct item{
@@ -55,7 +54,7 @@ private:
     };
     
     item hit [15];
-    item control [12];
+    item* control;
     
     struct MTV{
         sf::Vector2f axis;
@@ -63,6 +62,13 @@ private:
         bool check;
     };
     MTV mtv;
+    
+    struct namepos{
+        std::string nombre;
+        int* posicion;
+        Car* target;
+    };
+    namepos leaderboard[5];
     
 public:
     Game();
@@ -72,16 +78,23 @@ public:
     void go();   
     
 private:
-    bool collides(sf::Vector2f* target, sf::Vector2f* vertex);
     void handleEvents();
     void update();
     void render();
     void rendercontrol();
+    
+    /*  SAT  */
+    bool collides(sf::Vector2f* target, sf::Vector2f* vertex);
     void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex);
     sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
     bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
-    item createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, bool center, float rot);
     float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
+    
+    void checkPoint(Enemy* npc, item checkbox, int i);
+    void burbuja();
+    
+    /* CREATE MAP */
+    item createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, bool center, float rot);
 };
 
 #endif /* GAME_H */

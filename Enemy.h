@@ -22,15 +22,12 @@ class Enemy : public Car{
     private:
         float desiredRotation;
         float incrementalRotation;
-        bool collides;
-        bool checkPoints [12];
         
     public:
         Enemy(sf::Vector2f startPos, float speed);
         void setDesiredRotation(float rot);
         void logic();
-        void setCheckPoint(int i, bool flag);
-        bool getFlag(int i);
+
 };
 
 #endif /* ENEMY_H */

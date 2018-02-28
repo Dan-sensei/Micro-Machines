@@ -14,7 +14,6 @@
 #include "Player.h"
 
 Player::Player(sf::Vector2f startPos) {
-    vertex = new sf::Vector2f[4];
     size = AssetManager::GetTexture("Images/HERO.jpg").getSize();
     Car::car = sf::Sprite( AssetManager::GetTexture("Images/HERO.jpg") );
     
@@ -24,6 +23,7 @@ Player::Player(sf::Vector2f startPos) {
     car.setPosition(startPos);
     car.setRotation(0);
     
+    vertex = new sf::Vector2f[4];
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
     vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
     vertex[2] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y + cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
@@ -33,6 +33,15 @@ Player::Player(sf::Vector2f startPos) {
     std::cout << "Vertex 2: (" << vertex[1].x << ", " << vertex[1].y << ")" << std::endl;
     std::cout << "Vertex 3: (" << vertex[2].x << ", " << vertex[2].y << ")" << std::endl;
     std::cout << "Vertex 4: (" << vertex[3].x << ", " << vertex[3].y << ")" << std::endl;
+    
+    position = 0;
+    p_pos = &position;
+    
+    for (int i = 0; i< 12; i++){
+        visited[i]=false;
+        checkPoints[i] = false;
+    }
+
 }
 
 void Player::movement() {
@@ -75,37 +84,5 @@ void Player::movement() {
 
 void Player::setKeys(bool* k){
     keys=k;
-}
-
-void Player::setPos(sf::Vector2f pos, sf::Vector2f axis){
-    
-    //Origin 66
-    
-    //float x =  car.getPosition().x -pos.x;
-   //float y =  car.getPosition().y -pos.y ;
-    
-    car.move(pos.x, pos.y);
-    
-    std::cout << "Initial: " << car.getRotation() << std::endl;
-
-        
-        float x = cos((car.getRotation()-90)*PI/180);
-        float y = -sin((car.getRotation()-90)*PI/180);
-        float dot = 2 * (x*axis.x + y*axis.y);
-
-        sf::Vector2f reflection = sf::Vector2f(x - dot * axis.x , y - dot * axis.y);
-        float angle = atan2(reflection.x, reflection.y);
-
-        dot = x * axis.x + y*axis.y;
-        
-        
-        //if(abs(dot) < 0.72)
-          //  car.setRotation(angle);
-        
-        SPEED -= SPEED*abs(dot)*0.08;
-         
-    
-    
-   // SPEED*=0.3;
 }
 

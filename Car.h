@@ -31,7 +31,11 @@ protected:
     float* dtAsSeconds = new float[1];
     sf::Vector2f* vertex;
     sf::Vector2u size;
-    float position;
+    int* p_pos;
+    int position;
+    bool checkPoints [12];
+    bool visited [12];
+    
     
 public:
     Car();
@@ -40,8 +44,16 @@ public:
     void setTime(float* s);
     sf::Sprite getCar();
     sf::Vector2f* getVertex();
-    void incrementPosition(float pos);
-    float getPosition();
+    void incrementPosition(int pos);
+    int getPosition();
+    int* getP_pos();
+    
+    void setCheckPoint(int i, bool flag);
+    bool getFlag(int i);
+    
+    void setVisited(int i);
+    bool handleIncremenet(int i);
+    void setPos(sf::Vector2f pos, sf::Vector2f axis);
 };
 
 #endif /* CAR_H */

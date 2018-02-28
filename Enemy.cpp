@@ -16,28 +16,37 @@
 #include "Enemy.h"
 
 Enemy::Enemy(sf::Vector2f startPos, float speed) {
-    size = AssetManager::GetTexture("Images/HERO.jpg").getSize();
-    Car::car = sf::Sprite( AssetManager::GetTexture("Images/HERO.jpg") );
+    size = AssetManager::GetTexture("Images/Enemy.jpg").getSize();
+    Car::car = sf::Sprite( AssetManager::GetTexture("Images/Enemy.jpg") );
     car.setPosition(startPos);
     MAXSPEED = speed;
     car.setOrigin(size.x*0.5f, size.y);
     incrementalRotation = 0;
     desiredRotation = 0;
-    for (int i = 0; i< 9; i++)
+    for (int i = 0; i< 12; i++){
+        visited[i]=false;
         checkPoints[i] = false;
+    }
+    position = 0;
+    p_pos = &position;
+    
+    vertex = new sf::Vector2f[4];
+    vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
+    vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
+    vertex[2] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y + cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
+    vertex[3] = sf::Vector2f(car.getPosition().x + cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5));
+
+    
 }
 
 void Enemy::logic(){
     
     if(SPEED < MAXSPEED)        
         SPEED += AC;
-    
-    //std::cout << "desiredRotation: " << desiredRotation << std::endl;
-    //std::cout << "incrementalRotation: " << incrementalRotation << std::endl;
+
    
     if(desiredRotation>0 && incrementalRotation < desiredRotation){
         incrementalRotation += 5;
-        //std::cout << "Incrementing...: " << incrementalRotation << std::endl;
         car.rotate(5);
     }
     
@@ -49,7 +58,6 @@ void Enemy::logic(){
     if(incrementalRotation == desiredRotation){
         desiredRotation = 0;
         incrementalRotation = 0;
-        collides = false;
     }
     
     
@@ -58,18 +66,17 @@ void Enemy::logic(){
 
     car.move(dir);
     
+    vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
+    vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
+    vertex[2] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y + cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
+    vertex[3] = sf::Vector2f(car.getPosition().x + cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y + sin(car.getRotation()*PI/180) * (size.x*0.5));
+
+    
 }
 
 void Enemy::setDesiredRotation(float rot){
     desiredRotation = rot;
-    collides = true;
+
 }
 
 
-void Enemy::setCheckPoint(int i, bool flag){
-    checkPoints[i] = flag;
-}
-
-bool Enemy::getFlag(int i){
-    return checkPoints[i];
-}

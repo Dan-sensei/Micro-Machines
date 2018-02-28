@@ -23,18 +23,12 @@ Game::Game()
 {
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
-
-     //sf::Vector2f startPos = sf::Vector2f(-2000, -20);
-    sf::Vector2f startPos = sf::Vector2f(150, 1800);
-    //sf::Vector2f startPos = sf::Vector2f(0, 0);
-
     
-    //sf::Image Map;
-    //Map.loadFromFile("Images/Mapa.jpg");
+    sf::Vector2f startPos = sf::Vector2f(150, 1800);
     Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/New.jpg")); 
 
     view.setCenter(startPos);
-    view.zoom(1.2);
+    view.zoom(1.3);
     window.setView(view);   
     
     keys = new bool[256];
@@ -44,10 +38,10 @@ Game::Game()
     dtAsSeconds = new float[1];
     
     player = new Player(startPos);
-    IA = new Enemy(sf::Vector2f(80, 1500), 750);
-    IA2 = new Enemy(sf::Vector2f(150, 1700), 700);
-    IA3 = new Enemy(sf::Vector2f(180, 1650), 680);
-    IA4 = new Enemy(sf::Vector2f(200, 1420), 500);
+    IA = new Enemy(sf::Vector2f(80, 1500), 850);
+    IA2 = new Enemy(sf::Vector2f(150, 1700), 800);
+    IA3 = new Enemy(sf::Vector2f(180, 1650), 820);
+    IA4 = new Enemy(sf::Vector2f(200, 1420), 540);
     
     player->setKeys(keys);
     player->setTime(dtAsSeconds);
@@ -74,10 +68,11 @@ Game::Game()
     hit[10] = createHitbox(sf::Vector2f(4152, 1000), sf::Vector2f(1308, 583), 0, 1, -1, false, 0); 
     hit[11] = createHitbox(sf::Vector2f(509.1168825, 800), sf::Vector2f(5460, 583), 45, 1, -1, false, 0);
     hit[12] = createHitbox(sf::Vector2f(485, 2341), sf::Vector2f(5335, 943), 0, 1, 1, false, 0); 
-    hit[13] = createHitbox(sf::Vector2f(685.8935778, 500), sf::Vector2f(5820, 3284), 135, 1, 1, false, 0);   
+    hit[13] = createHitbox(sf::Vector2f(685.89357785, 500), sf::Vector2f(5820, 3284), 135, 1, 1, false, 0);   
     hit[14] = createHitbox(sf::Vector2f(2630, 1067), sf::Vector2f(2705, 2702), 0, -1, 1, false, 0);
     
     //PUNTOS DE CONTROL
+    control = new item [12];
     control[0] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 1308), 0, 1, 1, true, 45);
     control[1] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(1308, 291.5), 0, 1, 1, true, 45);
     control[2] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5460, 291.5), 0, 1, 1, true, 45);
@@ -90,7 +85,24 @@ Game::Game()
     control[9] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2121, 2994.5), 0, 1, 1, true, -45);
     control[10] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(583, 2994.5), 0, 1, 1, true, 45);
     control[11] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 2702), 0, 1, 1, true, 45);
-
+  
+    leaderboard[0].nombre = "IA 1";
+    leaderboard[1].nombre = "IA 2";
+    leaderboard[2].nombre = "IA 3";
+    leaderboard[3].nombre = "IA 4";
+    leaderboard[4].nombre = "Player";
+    
+    leaderboard[0].posicion = IA->getP_pos();
+    leaderboard[1].posicion = IA2->getP_pos();
+    leaderboard[2].posicion = IA3->getP_pos();
+    leaderboard[3].posicion = IA4->getP_pos();
+    leaderboard[4].posicion = player->getP_pos();
+    
+    leaderboard[0].target = IA;
+    leaderboard[1].target = IA2;
+    leaderboard[2].target = IA3;
+    leaderboard[3].target = IA4;
+    leaderboard[4].target = player;
 }
 
 Game::~Game() {
@@ -117,9 +129,8 @@ void Game::handleEvents(){
 
             case sf::Event::EventType::KeyPressed:
                 std::cout<< "Tecla " << event.key.code << std::endl;
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
-                    window.close();
-                keys[event.key.code]= true;             
+                keys[event.key.code]= true;
+                if(keys[16]) window.close();        //Cerrar
                 break;
 
             case sf::Event::KeyReleased:
@@ -140,53 +151,34 @@ void Game::update(){
     //std::cout<< "Vertex 1: " << player->getVertex()[1].x << ", " << player->getVertex()[1].y << std::endl;
     player->movement();
 
-    for(int i=0; i< 12; i++){
-        
-        if(IA->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA->getFlag(i)){
-            IA->setDesiredRotation(control[i].newRotation);
-            IA->setCheckPoint(i, true);
-            std::cout << "IA COLLISION!" <<std::endl;
-            break;
-        }
-        else if(!(IA->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
-            IA->setCheckPoint(i, false);
-        
-        if(IA2->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA2->getFlag(i)){
-            IA2->setDesiredRotation(control[i].newRotation);
-            IA2->setCheckPoint(i, true);
-            std::cout << "IA COLLISION!" <<std::endl;
-            break;
-        }
-        else if(!(IA2->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
-            IA2->setCheckPoint(i, false);
-        
-        if(IA3->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA3->getFlag(i)){
-            IA3->setDesiredRotation(control[i].newRotation);
-            IA3->setCheckPoint(i, true);
-            std::cout << "IA COLLISION!" <<std::endl;
-            break;
-        }
-        else if(!(IA3->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
-            IA3->setCheckPoint(i, false);
-        
-        if(IA4->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !IA4->getFlag(i)){
-            IA4->setDesiredRotation(control[i].newRotation);
-            IA4->setCheckPoint(i, true);
-            std::cout << "IA COLLISION!" <<std::endl;
-            break;
-        }
-        else if(!(IA4->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
-            IA4->setCheckPoint(i, false);
-    }
 
+    checkPoint(IA, control[IA->getPosition() % 12 ], IA->getPosition() % 12);
+    checkPoint(IA2, control[(IA2->getPosition()) % 12 ], IA2->getPosition() % 12);
+    checkPoint(IA3, control[(IA3->getPosition()) % 12 ], IA3->getPosition() % 12);
+    checkPoint(IA4, control[IA4->getPosition() % 12], IA4->getPosition() % 12);
+
+    
+    int i = (int)player->getPosition() % 12;
+    if(player->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !player->getFlag(i) && player->handleIncremenet(i)){
+         std::cout << "i: " << std::endl;
+         player->setCheckPoint(i, true);
+         player->setVisited(i);
+         player->incrementPosition(1);
+
+     }
+     else if(!(player->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds())))
+         player->setCheckPoint(i, false); 
+        
+    
+    
+    //std::cout << "Posicion: " << player->getPosition() << std::endl;
     IA->logic();
     IA2->logic();
     IA3->logic();
     IA4->logic();
     
-    for(int i = 0; i<15 ; i++){
-        //std::cout << "Collision! ("<<player->getCar().getPosition().x << ", "<<player->getCar().getPosition().y<<")" << std::endl;
-        //std::cout << "Previous ! ("<< previousPosition.x << ", "<< previousPosition.y<<")" << std::endl;
+    for(i = 0; i<15 ; i++){
+        
         if(collides(player->getVertex(), hit[i].vertex)){
             std::cout << "COLLIDES"<<std::endl;   
             
@@ -198,13 +190,41 @@ void Game::update(){
             
             player->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
         }
+         
+        if(collides(IA->getVertex(), hit[i].vertex)){
+            mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
+            mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
+            IA->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
+        }        
+        if(collides(IA2->getVertex(), hit[i].vertex)){
+            mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
+            mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
+            IA2->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
+        }
+        if(collides(IA3->getVertex(), hit[i].vertex)){
+            mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
+            mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
+            IA3->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
+        }
+        if(collides(IA4->getVertex(), hit[i].vertex)){
+            mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
+            mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
+            IA4->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
+        }
+
     }
        
-   
+    burbuja();
+    
+    std::cout << "1. " << leaderboard[0].nombre << " - P: " << leaderboard[0].target->getPosition() << std::endl;
+    std::cout << "2. " << leaderboard[1].nombre << " - P: " << leaderboard[1].target->getPosition() << std::endl;
+    std::cout << "3. " << leaderboard[2].nombre << " - P: " << leaderboard[2].target->getPosition() << std::endl;
+    std::cout << "3. " << leaderboard[3].nombre << " - P: " << leaderboard[3].target->getPosition() << std::endl;
+    std::cout << "4. " << leaderboard[4].nombre << " - P: " << leaderboard[4].target->getPosition() << std::endl << std::endl;
+
     view.setCenter(player->getCar().getPosition());
     window.setView(view);
     
-    previousPosition = player->getCar().getPosition();
 }
 
 void Game::render(){
@@ -226,9 +246,22 @@ void Game::rendercontrol(){
         window.draw(control[i].figure);
 }
 
+void Game::checkPoint(Enemy* npc, item checkbox, int i){
+    if(npc->getCar().getGlobalBounds().intersects(checkbox.figure.getGlobalBounds()) && !npc->getFlag(i) && npc->handleIncremenet(i)){
+        npc->setDesiredRotation(checkbox.newRotation);
+        npc->setCheckPoint(i, true);
+        npc->setVisited(i);
+        npc->incrementPosition(1);
+    }
+    else if(!(npc->getCar().getGlobalBounds().intersects(checkbox.figure.getGlobalBounds()))){
+        //std::cout << "ELSE IF" <<std::endl;
+        npc->setCheckPoint(i, false);
+    }
+    std::cout << std::endl;
+}
+
 //Separation Axis Algorithm - Guía seguida: http://www.dyn4j.org/2010/01/sat/
 bool Game::collides(sf::Vector2f* target, sf::Vector2f* vertex){
-    
     mtv.axis = sf::Vector2f(0, 0);
     mtv.distance = 0;
 
@@ -238,12 +271,11 @@ bool Game::collides(sf::Vector2f* target, sf::Vector2f* vertex){
     std::vector<sf::Vector2f> finalEdges;
     getNormals(finalEdges, target);
     getNormals(finalEdges, vertex);
-    
     sf::Vector2<double> pPlayer;
     sf::Vector2<double> pHitbox;
     
     for(std::vector<sf::Vector2f>::iterator edge = finalEdges.begin(); edge != finalEdges.end(); ++edge){
-        pPlayer = projection(*edge, player->getVertex());
+        pPlayer = projection(*edge, target);
         pHitbox = projection(*edge, vertex);
         
         if(!ItOverlaps(pPlayer, pHitbox)){
@@ -272,6 +304,7 @@ void Game::getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* verte
     sf::Vector2f next;
     sf::Vector2f edge;
     
+    /* METODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */
     double unit;
     for (int i = 0; i < 2; i++){
         first = vertex[i];
@@ -305,8 +338,6 @@ sf::Vector2<double> Game::projection(sf::Vector2f edge, sf::Vector2f* vertex){
     return p;
 }
 
-
-
 bool Game::ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2){
     if(p1.x > p2.y || p2.x > p1.y)
         return false;
@@ -330,7 +361,7 @@ Game::item Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rot
     if(center){
         
         h.figure.setOrigin(wallSize.x/2, wallSize.y/2);
-    std::cout << "Origin: "<< h.figure.getPosition().x << ", "<<h.figure.getPosition().y << std::endl;
+    //std::cout << "Origin: "<< h.figure.getPosition().x << ", "<<h.figure.getPosition().y << std::endl;
     }
     h.vertex = new sf::Vector2f [4];
     h.vertex[0]=pos;
@@ -349,4 +380,58 @@ Game::item Game::createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rot
     h.sy = sy;
     h.newRotation = rot;
     return h;
+}
+
+void Game::burbuja(){
+    namepos tmp;
+    int pro1;
+    int pro2;
+    double unit;
+    sf::Vector2f axis;
+    for (int i=1; i<5; i++)
+        for (int j=0 ; j<5 - 1; j++){
+            std::cout << "Waaaa incial" << std:: endl;
+            if (*leaderboard[j].posicion < *leaderboard[j+1].posicion){  
+                
+                tmp = leaderboard[j];
+                leaderboard[j] = leaderboard[j+1];
+                leaderboard[j+1] = tmp;
+            }
+            else if(*leaderboard[j].posicion == *leaderboard[j+1].posicion){
+                int prev = *leaderboard[j].posicion % 12 -1;
+                if(*leaderboard[j].posicion % 12 ==0){
+                    prev = 11;
+                }
+                
+                std::cout << "PREV---- : " << prev << std:: endl;
+                
+                axis = control[(*leaderboard[j].posicion) % 12].figure.getPosition() - control[prev].figure.getPosition();
+                unit = sqrt(axis.x * axis.x + axis.y * axis.y);
+                axis = sf::Vector2f(axis.x/unit, axis.y/unit);
+                std::cout << "EJE: " << axis.x << ", " << axis.y << std:: endl;
+                if(axis.x == 0){
+                    pro1 = leaderboard[j].target->getCar().getPosition().y * axis.y;
+                    pro2 = leaderboard[j+1].target->getCar().getPosition().y * axis.y;
+                }
+                else if(axis.y == 0){
+                    
+                    pro1 = leaderboard[j].target->getCar().getPosition().x * axis.x;
+                    pro2 = leaderboard[j+1].target->getCar().getPosition().x * axis.x;
+                }
+                else{
+                    
+                    
+                    
+                    pro1 = axis.x * (leaderboard[j].target->getCar().getPosition().x) + axis.y * (leaderboard[j].target->getCar().getPosition().y);
+                    pro2 = axis.x * (leaderboard[j+1].target->getCar().getPosition().x) + axis.y * (leaderboard[j+1].target->getCar().getPosition().y);
+                }
+                
+                std::cout << "WAAAAAAAAAfinal" << std:: endl;
+                if(pro1 < pro2){
+                    tmp = leaderboard[j];
+                    leaderboard[j] = leaderboard[j+1];
+                    leaderboard[j+1] = tmp;
+                }
+            }
+        }
 }
