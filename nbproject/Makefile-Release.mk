@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Enemy.o \
 	${OBJECTDIR}/Game.o \
 	${OBJECTDIR}/Player.o \
+	${OBJECTDIR}/SAT.o \
 	${OBJECTDIR}/main.o
 
 
@@ -97,6 +98,11 @@ ${OBJECTDIR}/Player.o: Player.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Player.o Player.cpp
+
+${OBJECTDIR}/SAT.o: SAT.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SAT.o SAT.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

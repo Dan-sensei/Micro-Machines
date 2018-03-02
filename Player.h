@@ -17,18 +17,17 @@
 #include <SFML/System/Vector2.hpp>
 #include "AssetManager.h"
 #include "Car.h"
+#include "SAT.h"
 
 class Player : public Car {
 private:
     sf::Vector2f dir;
-    float AC = 17;
-    float MAXSPEED = 800;
-    bool* keys = new bool [256];
+    bool* keys;
+    float ROTATION;
+    
 public:
-    Player(sf::Vector2f startPos);
+    Player(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt, float r_speed, bool* keyboard);
     void movement();
-    void setKeys(bool* k);
-
 };
 
 #endif /* PLAYER_H */

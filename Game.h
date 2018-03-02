@@ -19,20 +19,28 @@
 #include "Player.h"
 #include "Enemy.h"
 #include <math.h>
+#include "SAT.h"
 
 class Game {
 private:
+    int N_IA;
+    int N_PLAYERS;
     sf::RenderWindow window;
     sf::View view;
     sf::Sprite Cool_Map;
     
     bool* keys;
     float* dtAsSeconds;
+    
+    Enemy* IAs[4];
     Player* player;
     Enemy* IA;
     Enemy* IA2;
     Enemy* IA3;
     Enemy* IA4;
+    
+    SAT Sat;
+    SAT::MTV Sat_result;;
     
     AssetManager manager;
     sf::Clock clock;
@@ -56,13 +64,6 @@ private:
     item hit [15];
     item* control;
     
-    struct MTV{
-        sf::Vector2f axis;
-        double distance;
-        bool check;
-    };
-    MTV mtv;
-    
     struct namepos{
         sf::Text id;
         std::string nombre;
@@ -72,7 +73,7 @@ private:
     namepos leaderboard[5];
     
 public:
-    Game();
+    Game(int N, int IA);
     Game(const Game& orig);
     virtual ~Game();
     
@@ -83,15 +84,12 @@ private:
     void update();
     void render();
     void rendercontrol();
+    void renderEnemies();
     
-    /*  SAT  */
-    bool collides(sf::Vector2f* target, sf::Vector2f* vertex);
-    void getNormals(std::vector<sf::Vector2f>& finalEdges, sf::Vector2f* vertex);
-    sf::Vector2<double> projection(sf::Vector2f edge, sf::Vector2f* vertex);
-    bool ItOverlaps(sf::Vector2<double> p1, sf::Vector2<double> p2);
-    float overlapDistance(sf::Vector2<double> p1, sf::Vector2<double> p2);
     
-    void checkPoint(Enemy* npc, item checkbox, int i);
+    void checkPoints();
+    void checkCollisionsBetweeenHitbox();
+    void checkCollisionsBetweeenPlayers();
     void burbuja();
     
     /* CREATE MAP */

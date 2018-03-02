@@ -22,23 +22,27 @@
 class Car {
     
 protected:
-    float MAXSPEED;
-    sf::Sprite car;
-    float AC = 10;
-    float SPEED = 0;
-    float ROTATION = 300;
     const float PI = 3.14159265;
-    float* dtAsSeconds = new float[1];
-    sf::Vector2f* vertex;
+    sf::Sprite car;
     sf::Vector2u size;
-    int* p_pos;
+    
+    float SPEED;
+    float AC;
+    float MAXSPEED;
+    
+    float* deltaTime;
+    
+    sf::Vector2f* vertex;
+    
     int position;
-    bool checkPoints [12];
-    bool visited [12];
+    int* p_pos;
     int vueltas;
     
+    bool checkPoints [12];
+    bool visited [12];
+    
 public:
-    Car();
+    Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt);
     Car(const Car& orig);
     virtual ~Car();
     void setTime(float* s);

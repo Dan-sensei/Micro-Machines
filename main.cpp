@@ -67,8 +67,7 @@ int main(int argc, char** argv) {
     for(int i = 0; i< 4; i++)
         std::cout << test[i].nombre << " " << test[i].pos << std::endl;
     
-
-    Game game;
+    Game game(1, 4);
     game.go();
 }
 
