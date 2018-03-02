@@ -55,9 +55,13 @@ void Car::setVisited(int i){
 }
 
 bool Car::handleIncremenet(int i){
-    if(position % 12 == 0)
+        
+    if(position != 0 && position % 12 == 0){
+        std::cout  << "VUELTA!" << std::endl;
+        vueltas++;
         for (int i = 0; i< 12; i++)
             visited[i]=false;
+    }
     
     return (i== 0 && !visited[0]) ? true : (!visited[i] && visited[i-1]) ? true: false;
 }
@@ -92,9 +96,10 @@ void Car::setPos(sf::Vector2f pos, sf::Vector2f axis){
       //  car.setRotation(angle);
 
     SPEED -= SPEED*abs(dot)*0.08;
-         
-    
-    
+
    // SPEED*=0.3;
 }
 
+int Car::getVueltas(){
+    return vueltas;
+}

@@ -64,6 +64,7 @@ private:
     MTV mtv;
     
     struct namepos{
+        sf::Text id;
         std::string nombre;
         int* posicion;
         Car* target;

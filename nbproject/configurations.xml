@@ -47,9 +47,12 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <standard>10</standard>
+        </cTool>
         <ccTool>
+          <standard>8</standard>
           <incDir>
-            <pElem>/usr/include/c++/7.3.0</pElem>
             <pElem>/usr/include/SFML</pElem>
           </incDir>
         </ccTool>

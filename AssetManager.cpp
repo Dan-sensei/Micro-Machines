@@ -32,3 +32,22 @@ sf::Texture& AssetManager::GetTexture(const std::string& filename){
         return texture;
     }
 }
+
+/*
+ /usr/include/c++/7.3.0
+ ../build/include
+ */
+sf::Font& AssetManager::GetFont(const std::string& filename){
+    
+    auto& fontMap = sInstance->m_Fonts;
+    auto pairFound = fontMap.find(filename);
+    
+    if(pairFound != fontMap.end()){
+        return pairFound->second;
+    }
+    else{
+        auto& font = fontMap[filename];
+        font.loadFromFile(filename);
+        return font;
+    }
+}

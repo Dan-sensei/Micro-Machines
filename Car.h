@@ -35,7 +35,7 @@ protected:
     int position;
     bool checkPoints [12];
     bool visited [12];
-    
+    int vueltas;
     
 public:
     Car();
@@ -54,6 +54,8 @@ public:
     void setVisited(int i);
     bool handleIncremenet(int i);
     void setPos(sf::Vector2f pos, sf::Vector2f axis);
+    
+    int getVueltas();
 };
 
 #endif /* CAR_H */

@@ -41,6 +41,7 @@ Player::Player(sf::Vector2f startPos) {
         visited[i]=false;
         checkPoints[i] = false;
     }
+    vueltas = 0;
 
 }
 

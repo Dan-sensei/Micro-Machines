@@ -17,10 +17,11 @@
 #include "Game.h"
 
 
-Game::Game()
-:window(sf::VideoMode(800, 800), "MicroMachines - Neon Edition")
-,view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y))
+Game::Game():
+window(sf::VideoMode(800, 800), "MicroMachines - Neon Edition")
 {
+
+    view = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
     
@@ -103,6 +104,13 @@ Game::Game()
     leaderboard[2].target = IA3;
     leaderboard[3].target = IA4;
     leaderboard[4].target = player;
+    
+    
+    leaderboard[0].id = sf::Text("IA #1", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+    leaderboard[1].id = sf::Text("IA #2", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+    leaderboard[2].id = sf::Text("IA #3", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+    leaderboard[3].id = sf::Text("IA #4", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+    leaderboard[4].id = sf::Text("Player", AssetManager::GetFont("Fonts/LemonMilk.otf"));
 }
 
 Game::~Game() {
@@ -160,7 +168,6 @@ void Game::update(){
     
     int i = (int)player->getPosition() % 12;
     if(player->getCar().getGlobalBounds().intersects(control[i].figure.getGlobalBounds()) && !player->getFlag(i) && player->handleIncremenet(i)){
-         std::cout << "i: " << std::endl;
          player->setCheckPoint(i, true);
          player->setVisited(i);
          player->incrementPosition(1);
@@ -191,6 +198,8 @@ void Game::update(){
             player->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
         }
          
+        
+        
         if(collides(IA->getVertex(), hit[i].vertex)){
             mtv.axis.x = hit[i].sx * abs(mtv.axis.x);
             mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
@@ -211,25 +220,35 @@ void Game::update(){
             mtv.axis.y = hit[i].sy * abs(mtv.axis.y);
             IA4->setPos(sf::Vector2f(mtv.axis.x*mtv.distance,  mtv.axis.y*mtv.distance), mtv.axis);
         }
-
     }
+    
        
     burbuja();
     
-    std::cout << "1. " << leaderboard[0].nombre << " - P: " << leaderboard[0].target->getPosition() << std::endl;
-    std::cout << "2. " << leaderboard[1].nombre << " - P: " << leaderboard[1].target->getPosition() << std::endl;
-    std::cout << "3. " << leaderboard[2].nombre << " - P: " << leaderboard[2].target->getPosition() << std::endl;
-    std::cout << "3. " << leaderboard[3].nombre << " - P: " << leaderboard[3].target->getPosition() << std::endl;
-    std::cout << "4. " << leaderboard[4].nombre << " - P: " << leaderboard[4].target->getPosition() << std::endl << std::endl;
-
+    leaderboard[0].id.setPosition(player->getCar().getPosition() - sf::Vector2f(450, 450));
+    leaderboard[1].id.setPosition(player->getCar().getPosition() - sf::Vector2f(450, 400));
+    leaderboard[2].id.setPosition(player->getCar().getPosition() - sf::Vector2f(450, 350));
+    leaderboard[3].id.setPosition(player->getCar().getPosition() - sf::Vector2f(450, 300));
+    leaderboard[4].id.setPosition(player->getCar().getPosition() - sf::Vector2f(450, 250));
+    
     view.setCenter(player->getCar().getPosition());
     window.setView(view);
+    
+    if(player->getVueltas() == 2){
+        window.close();
+    }
     
 }
 
 void Game::render(){
     window.clear(Dark);
     window.draw(Cool_Map);
+    
+    window.draw(leaderboard[0].id);
+    window.draw(leaderboard[1].id);
+    window.draw(leaderboard[2].id);
+    window.draw(leaderboard[3].id);
+    window.draw(leaderboard[4].id);
     rendercontrol();
     
     window.draw(player->getCar());
@@ -237,6 +256,8 @@ void Game::render(){
     window.draw(IA2->getCar());
     window.draw(IA3->getCar());
     window.draw(IA4->getCar());
+    
+    
     
     window.display();
 }
@@ -257,7 +278,6 @@ void Game::checkPoint(Enemy* npc, item checkbox, int i){
         //std::cout << "ELSE IF" <<std::endl;
         npc->setCheckPoint(i, false);
     }
-    std::cout << std::endl;
 }
 
 //Separation Axis Algorithm - Guía seguida: http://www.dyn4j.org/2010/01/sat/
@@ -280,6 +300,7 @@ bool Game::collides(sf::Vector2f* target, sf::Vector2f* vertex){
         
         if(!ItOverlaps(pPlayer, pHitbox)){
            // std::cout << "NOPE" << std::endl;
+    
             return false;
         }
         else{
@@ -390,7 +411,7 @@ void Game::burbuja(){
     sf::Vector2f axis;
     for (int i=1; i<5; i++)
         for (int j=0 ; j<5 - 1; j++){
-            std::cout << "Waaaa incial" << std:: endl;
+
             if (*leaderboard[j].posicion < *leaderboard[j+1].posicion){  
                 
                 tmp = leaderboard[j];
@@ -403,12 +424,10 @@ void Game::burbuja(){
                     prev = 11;
                 }
                 
-                std::cout << "PREV---- : " << prev << std:: endl;
-                
                 axis = control[(*leaderboard[j].posicion) % 12].figure.getPosition() - control[prev].figure.getPosition();
                 unit = sqrt(axis.x * axis.x + axis.y * axis.y);
                 axis = sf::Vector2f(axis.x/unit, axis.y/unit);
-                std::cout << "EJE: " << axis.x << ", " << axis.y << std:: endl;
+                //std::cout << "EJE: " << axis.x << ", " << axis.y << std:: endl;
                 if(axis.x == 0){
                     pro1 = leaderboard[j].target->getCar().getPosition().y * axis.y;
                     pro2 = leaderboard[j+1].target->getCar().getPosition().y * axis.y;
@@ -425,8 +444,7 @@ void Game::burbuja(){
                     pro1 = axis.x * (leaderboard[j].target->getCar().getPosition().x) + axis.y * (leaderboard[j].target->getCar().getPosition().y);
                     pro2 = axis.x * (leaderboard[j+1].target->getCar().getPosition().x) + axis.y * (leaderboard[j+1].target->getCar().getPosition().y);
                 }
-                
-                std::cout << "WAAAAAAAAAfinal" << std:: endl;
+               
                 if(pro1 < pro2){
                     tmp = leaderboard[j];
                     leaderboard[j] = leaderboard[j+1];
