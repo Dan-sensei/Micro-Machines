@@ -27,7 +27,8 @@ private:
     
 public:
     Player(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt, float r_speed, bool* keyboard);
-    void movement();
+    void movement(sf::Vector2f& position, float& speed, float& rotation);
+    
 };
 
 #endif /* PLAYER_H */

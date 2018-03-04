@@ -24,7 +24,7 @@ Enemy::Enemy(std::string const& sprite_name, sf::Vector2f startPosition, float M
 void Enemy::logic(){
     
     if(SPEED < MAXSPEED)        
-        SPEED += AC;
+        SPEED += AC*deltaTime[0];
 
    
     if(desiredRotation>0 && incrementalRotation < desiredRotation){
@@ -43,10 +43,9 @@ void Enemy::logic(){
     }
     
     
-    sf::Vector2f dir = sf::Vector2f(sin(car.getRotation()*PI/180), -cos(car.getRotation()*PI/180));
-    dir *= SPEED*deltaTime[0];
+    sf::Vector2f dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
 
-    car.move(dir);
+    car.move(dir*deltaTime[0]);
     
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
     vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);

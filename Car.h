@@ -58,6 +58,7 @@ public:
     void setVisited(int i);
     bool handleIncremenet(int i);
     void setPos(sf::Vector2f pos, sf::Vector2f axis);
+    void interpola(float x, float y, float r);
     
     int getVueltas();
 };

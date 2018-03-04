@@ -108,27 +108,29 @@ void Car::setPos(sf::Vector2f pos, sf::Vector2f axis){
     
     car.move(pos.x, pos.y);
     
-    std::cout << "Initial: " << car.getRotation() << std::endl;
+    //std::cout << "Initial: " << car.getRotation() << std::endl;
 
         
     float x = cos((car.getRotation()-90)*PI/180);
     float y = -sin((car.getRotation()-90)*PI/180);
-    float dot = 2 * (x*axis.x + y*axis.y);
+    //float dot = 2 * (x*axis.x + y*axis.y);
 
-    sf::Vector2f reflection = sf::Vector2f(x - dot * axis.x , y - dot * axis.y);
-    float angle = atan2(reflection.x, reflection.y)*180/PI;
+    //sf::Vector2f reflection = sf::Vector2f(x - dot * axis.x , y - dot * axis.y);
+    //float angle = atan2(reflection.x, reflection.y)*180/PI;
 
-    dot = x * axis.x + y*axis.y;
-
-
+    float dot = x * axis.x + y*axis.y;
+    
     //if(abs(dot) < 0.72)
       //  car.setRotation(angle);
 
-    SPEED -= SPEED*abs(dot)*0.08;
-
-   // SPEED*=0.3;
+    SPEED -= SPEED*abs(dot)*0.8;
 }
 
 int Car::getVueltas(){
     return vueltas;
+}
+
+void Car::interpola(float x, float y, float r){
+    car.setPosition(x, y);
+    car.setRotation(r);
 }

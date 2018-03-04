@@ -24,7 +24,7 @@ Player::Player(std::string const& sprite_name, sf::Vector2f startPosition, float
     std::cout << "Vertex 4: (" << vertex[3].x << ", " << vertex[3].y << ")" << std::endl;
 }
 
-void Player::movement() {
+void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
     
     //       Q: 16
     //  Arriba: 73   |  W: 22
@@ -32,15 +32,17 @@ void Player::movement() {
     //     Izq: 71   |  A: 0
     // Derecha: 72   |  D: 3   
     
-    //std::cout << "SPEED " << SPEED << std::endl;
+    std::cout << "SPEED " << SPEED << std::endl;
+    std::cout << "DT " << deltaTime[0] << std::endl;
+
     if(SPEED > -MAXSPEED && (keys[74] || keys[18])){           //ABAJO
-        SPEED -= AC;
+        SPEED -= AC*deltaTime[0];
     }
     else if(SPEED < MAXSPEED && (keys[73] || keys[22])){      //ARRIBA
-        SPEED += AC;
+        SPEED += AC*deltaTime[0];
     }
 
-
+    
     if(keys[71] || keys[0]){       //IZQUIERDA
         car.rotate(-ROTATION*deltaTime[0]*SPEED*(1/MAXSPEED));
     }     
@@ -48,10 +50,14 @@ void Player::movement() {
         car.rotate(ROTATION*deltaTime[0]*SPEED*(1/MAXSPEED));
     }        
     
-    dir = sf::Vector2f(sin(car.getRotation()*PI/180), -cos(car.getRotation()*PI/180));
-    dir *= SPEED*deltaTime[0];
+    dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
 
-    car.move(dir);
+    //std::cout << "Speed: " << SPEED << " | Dir: " << dir.x << ", " << dir.y << std::endl;
+    
+    car.move(dir*deltaTime[0]);
+    
+    //std::cout << "deltaTime: " << deltaTime[0] << std::endl;
+    //car.move(dir);
     
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
     vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
@@ -60,5 +66,9 @@ void Player::movement() {
     
     if(keys[4])         //E
         SPEED = 0;
+    
+    position = car.getPosition();
+    speed = SPEED;
+    rotation = car.getRotation();
 }
 

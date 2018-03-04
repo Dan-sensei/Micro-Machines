@@ -54,8 +54,8 @@ SAT::MTV SAT::collides(sf::Vector2f* target, sf::Vector2f* vertex){
     }
     
     mtv.collides = true;
-    mtv.mtv = sf::Vector2f(abs(MINIMUM.x) * THE_OVERLAP, abs(MINIMUM.y) * THE_OVERLAP);
-    
+    mtv.axis = sf::Vector2f(abs(MINIMUM.x), abs(MINIMUM.y));
+    mtv.amount = THE_OVERLAP;
     return mtv;
 }
 

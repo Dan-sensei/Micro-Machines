@@ -25,7 +25,8 @@ public:
 
     struct MTV{
         bool collides;
-        sf::Vector2f mtv;
+        sf::Vector2f axis;
+        float amount;
     };
 
 public:

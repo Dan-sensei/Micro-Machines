@@ -34,16 +34,20 @@ private:
     
     Enemy* IAs[4];
     Player* player;
-    Enemy* IA;
-    Enemy* IA2;
-    Enemy* IA3;
-    Enemy* IA4;
+    
+    struct State{
+        sf::Vector2f position;
+        float Speed;
+        float rotation;
+    };
+    State previous[5];
+    State actual[5];
     
     SAT Sat;
     SAT::MTV Sat_result;;
     
     AssetManager manager;
-    sf::Clock clock;
+    sf::Clock masterClock;
     sf::Time deltaTime;
     sf::Time elapsedTime;
     
@@ -82,9 +86,9 @@ public:
 private:
     void handleEvents();
     void update();
-    void render();
+    void render(float tick);
     void rendercontrol();
-    void renderEnemies();
+    void renderEnemies(float tick);
     
     
     void checkPoints();
