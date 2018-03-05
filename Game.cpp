@@ -118,7 +118,7 @@ void Game::go(){
     while(window.isOpen()){
         handleEvents();
         std::cout << "TIME: " << masterClock.getElapsedTime().asMilliseconds() << std::endl;
-        if(masterClock.getElapsedTime().asMilliseconds() > TICK){
+        //if(masterClock.getElapsedTime().asMilliseconds() > TICK){
             std::cout << "UPDATE --" << std::endl;
             for(int i = 0; i < (N_PLAYERS + N_IA); i++){
                 previous[i] = actual[i];
@@ -129,7 +129,7 @@ void Game::go(){
             
             update();
 
-        }
+        //}
         
         float tick = fmin(1.0f, ((float)(masterClock.getElapsedTime().asMilliseconds())/(float)(TICK)));
 

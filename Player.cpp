@@ -26,6 +26,9 @@ Player::Player(std::string const& sprite_name, sf::Vector2f startPosition, float
 
 void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
     
+    dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
+    car.move(dir.x*deltaTime[0] + (1/2)*AC*deltaTime[0]*deltaTime[0], dir.y*deltaTime[0] + (1/2)*AC*deltaTime[0]*deltaTime[0]);
+    
     //       Q: 16
     //  Arriba: 73   |  W: 22
     //   Abajo: 74   |  S: 18
@@ -50,11 +53,9 @@ void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
         car.rotate(ROTATION*deltaTime[0]*SPEED*(1/MAXSPEED));
     }        
     
-    dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
 
     //std::cout << "Speed: " << SPEED << " | Dir: " << dir.x << ", " << dir.y << std::endl;
     
-    car.move(dir*deltaTime[0]);
     
     //std::cout << "deltaTime: " << deltaTime[0] << std::endl;
     //car.move(dir);
