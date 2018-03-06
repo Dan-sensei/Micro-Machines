@@ -21,7 +21,6 @@ Car::Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S
     car.setOrigin(size.x*0.5f, size.y);
     car.setPosition(startPosition);
     car.setRotation(rotation);
-    
     SPEED = 0;
     MAXSPEED = MAX_S;
     AC = acceleration; 
@@ -99,7 +98,7 @@ int* Car::getP_pos(){
     return p_pos;
 }
 
-void Car::setPos(sf::Vector2f pos, sf::Vector2f axis){
+void Car::handleHitboxCollision(sf::Vector2f pos, sf::Vector2f axis){
     
     //Origin 66
     
@@ -123,7 +122,19 @@ void Car::setPos(sf::Vector2f pos, sf::Vector2f axis){
     //if(abs(dot) < 0.72)
       //  car.setRotation(angle);
 
-    SPEED -= SPEED*abs(dot)*0.8;
+    SPEED -= SPEED*abs(dot)*0.5;
+}
+
+void Car::handlePlayersCollision(sf::Vector2f pos, sf::Vector2f axis){
+    car.move(pos.x, pos.y);
+    
+    //std::cout << "Initial: " << car.getRotation() << std::endl;
+    
+    float x = cos((car.getRotation()-90)*PI/180);
+    float y = -sin((car.getRotation()-90)*PI/180);
+    float dot = x * axis.x + y*axis.y;
+
+    SPEED -= SPEED*abs(dot)*0.2;
 }
 
 int Car::getVueltas(){

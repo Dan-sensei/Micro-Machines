@@ -27,6 +27,8 @@ private:
     int N_PLAYERS;
     sf::RenderWindow window;
     sf::View view;
+    sf::View view2;
+    sf::View UI;
     sf::Sprite Cool_Map;
     
     bool* keys;
@@ -37,7 +39,6 @@ private:
     
     struct State{
         sf::Vector2f position;
-        float Speed;
         float rotation;
     };
     State previous[5];
@@ -88,8 +89,8 @@ private:
     void update();
     void render(float tick);
     void rendercontrol();
-    void renderEnemies(float tick);
-    
+    void renderPlayers(float tick);
+    void renderPlayers2(float tick);
     
     void checkPoints();
     void checkCollisionsBetweeenHitbox();

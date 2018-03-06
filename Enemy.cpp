@@ -42,9 +42,7 @@ void Enemy::logic(){
         incrementalRotation = 0;
     }
     
-    
     sf::Vector2f dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
-
     car.move(dir*deltaTime[0]);
     
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));

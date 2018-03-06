@@ -18,13 +18,9 @@ Player::Player(std::string const& sprite_name, sf::Vector2f startPosition, float
 {
     ROTATION = r_speed;
     keys = keyboard;
-    std::cout << "Vertex 1: (" << vertex[0].x << ", " << vertex[0].y << ")" << std::endl;
-    std::cout << "Vertex 2: (" << vertex[1].x << ", " << vertex[1].y << ")" << std::endl;
-    std::cout << "Vertex 3: (" << vertex[2].x << ", " << vertex[2].y << ")" << std::endl;
-    std::cout << "Vertex 4: (" << vertex[3].x << ", " << vertex[3].y << ")" << std::endl;
 }
 
-void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
+void Player::movement() {
     
     dir = sf::Vector2f(sin(car.getRotation()*PI/180) * SPEED, -cos(car.getRotation()*PI/180) * SPEED);
     car.move(dir.x*deltaTime[0] + (1/2)*AC*deltaTime[0]*deltaTime[0], dir.y*deltaTime[0] + (1/2)*AC*deltaTime[0]*deltaTime[0]);
@@ -34,9 +30,6 @@ void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
     //   Abajo: 74   |  S: 18
     //     Izq: 71   |  A: 0
     // Derecha: 72   |  D: 3   
-    
-    std::cout << "SPEED " << SPEED << std::endl;
-    std::cout << "DT " << deltaTime[0] << std::endl;
 
     if(SPEED > -MAXSPEED && (keys[74] || keys[18])){           //ABAJO
         SPEED -= AC*deltaTime[0];
@@ -68,8 +61,5 @@ void Player::movement(sf::Vector2f& position, float& speed, float& rotation) {
     if(keys[4])         //E
         SPEED = 0;
     
-    position = car.getPosition();
-    speed = SPEED;
-    rotation = car.getRotation();
 }
 
