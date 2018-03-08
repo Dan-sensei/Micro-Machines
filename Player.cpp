@@ -58,9 +58,9 @@ void Player::movement() {
     }        
     
     if(SPEED > MAXSPEED)
-        SPEED -= 1000*deltaTime[0];
+        SPEED -= 500*deltaTime[0];
     else if(SPEED < -MAXSPEED)
-        SPEED += 1000*deltaTime[0];
+        SPEED += 500*deltaTime[0];
 
     //std::cout << "Speed: " << SPEED << " | Dir: " << dir.x << ", " << dir.y << std::endl;
     

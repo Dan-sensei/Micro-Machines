@@ -27,6 +27,10 @@ private:
     
     int N_IA;
     int N_PLAYERS;
+    int VUELTAS;
+    
+    std::string winner;
+    
     sf::RenderWindow window;
     sf::View view;
     sf::View view2;
@@ -52,6 +56,7 @@ private:
     sf::Clock masterClock;
     sf::Time deltaTime;
     sf::Time elapsedTime;
+
     
     //sf::RectangleShape* hitbox;
     sf::Color Dark;
@@ -78,7 +83,7 @@ private:
     namepos leaderboard[6];
     
 public:
-    Game(int N, int IA);
+    Game(int N, int nVueltas);
     Game(const Game& orig);
     virtual ~Game();
     
@@ -88,9 +93,10 @@ private:
     void handleEvents();
     void update();
     void render(float tick);
+    void render_init();
     void rendercontrol();
     void renderPlayers(float tick, int camera);
-    void renderEnemies(float tick, int camera);
+    void renderEnemies(float tick);
     
     void checkPoints();
     void checkCollisionsBetweeenHitbox();

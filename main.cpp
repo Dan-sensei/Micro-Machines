@@ -22,8 +22,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    
-    Game game(1, 4);
+    //JUGADORES HUMANOS [1, 2] , VUELTAS
+    Game game(2, 2);
     game.go();
     
 }
