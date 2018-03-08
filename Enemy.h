@@ -23,6 +23,7 @@ class Enemy : public Car{
         float desiredRotation;
         float incrementalRotation;
         
+        
     public:
         Enemy(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt);
         void setDesiredRotation(float rot);

@@ -13,7 +13,7 @@
 
 #include "Car.h"
 
-Car::Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt) {
+Car::Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float RootS, float* dt) {
     
     Car::car = sf::Sprite( AssetManager::GetTexture(sprite_name) );
     size = AssetManager::GetTexture(sprite_name).getSize();
@@ -21,9 +21,12 @@ Car::Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S
     car.setOrigin(size.x*0.5f, size.y);
     car.setPosition(startPosition);
     car.setRotation(rotation);
+    
+    ROTATION = RootS;
     SPEED = 0;
     MAXSPEED = MAX_S;
     AC = acceleration; 
+    onAir = false;
     
     vertex = new sf::Vector2f[4];
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
@@ -122,19 +125,13 @@ void Car::handleHitboxCollision(sf::Vector2f pos, sf::Vector2f axis){
     //if(abs(dot) < 0.72)
       //  car.setRotation(angle);
 
-    SPEED -= SPEED*abs(dot)*0.5;
+    SPEED -= SPEED*abs(dot)*0.3;
 }
 
 void Car::handlePlayersCollision(sf::Vector2f pos, sf::Vector2f axis){
     car.move(pos.x, pos.y);
-    
-    //std::cout << "Initial: " << car.getRotation() << std::endl;
-    
-    float x = cos((car.getRotation()-90)*PI/180);
-    float y = -sin((car.getRotation()-90)*PI/180);
-    float dot = x * axis.x + y*axis.y;
 
-    SPEED -= SPEED*abs(dot)*0.2;
+    SPEED -= SPEED*0.1;
 }
 
 int Car::getVueltas(){
@@ -144,4 +141,16 @@ int Car::getVueltas(){
 void Car::interpola(float x, float y, float r){
     car.setPosition(x, y);
     car.setRotation(r);
+}
+
+bool Car::isOnAir(){
+    return onAir;
+}
+
+void Car::setAir(bool set){
+    onAir = set;
+}
+
+void Car::setSpeed(float s){
+    SPEED = s;
 }

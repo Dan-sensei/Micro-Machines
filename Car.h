@@ -29,6 +29,7 @@ protected:
     float SPEED;
     float AC;
     float MAXSPEED;
+    float ROTATION;
     
     float* deltaTime;
     
@@ -41,8 +42,10 @@ protected:
     bool checkPoints [12];
     bool visited [12];
     
+    bool onAir;
+    
 public:
-    Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt);
+    Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float RootS, float* dt);
     Car(const Car& orig);
     virtual ~Car();
     void setTime(float* s);
@@ -62,6 +65,10 @@ public:
     void interpola(float x, float y, float r);
     
     int getVueltas();
+    bool isOnAir();
+    void setAir(bool set);
+    
+    void setSpeed(float s);
 };
 
 #endif /* CAR_H */

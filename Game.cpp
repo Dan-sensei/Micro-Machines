@@ -16,35 +16,41 @@
 
 #include "Game.h"
 
-#define TICK 1000/30
+#define TICK 1000/25
 
 Game::Game(int N, int IA):
 window(sf::VideoMode(1200, 900), "MicroMachines - Neon Edition")
 {
-    //Sat = new SAT();
+    window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width/2 -600, 50));
+
     N_PLAYERS = N;
     N_IA = IA;
-    window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width/2 -600, 50));
+    
+    sf::Vector2f startPos = sf::Vector2f(400, 1800);
     
     UI = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    UI.setCenter(startPos);
     
-    view = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y/2));
-    view.setViewport(sf::FloatRect(0, 0, 1, 0.5f));
-    
-    view2 = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y/2));
-    view2.setViewport(sf::FloatRect(0, 0.5f , 1, 0.5f));
+    if(N_PLAYERS == 1){
+         view = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    }
+    else{
+        view = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y/2));
+        view.setViewport(sf::FloatRect(0, 0, 1, 0.5f));
+
+        view2 = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y/2));
+        view2.setViewport(sf::FloatRect(0, 0.5f , 1, 0.5f));
+        view2.setCenter(startPos);
+        view2.zoom(1.3);
+    }
+    view.setCenter(startPos);
+    view.zoom(1.3);
     
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
     
-    sf::Vector2f startPos = sf::Vector2f(400, 1800);
     Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/New.jpg")); 
 
-    UI.setCenter(startPos);
-    view.setCenter(startPos);
-    view.zoom(1.3);
-    view2.zoom(1.3);
-    view2.setCenter(startPos);
     window.setView(view);  
     
     keys = new bool[256];
@@ -54,11 +60,12 @@ window(sf::VideoMode(1200, 900), "MicroMachines - Neon Edition")
     dtAsSeconds = new float[1];
     //sprite_name, startPosition, MAX_SPEED, acceleration, Initial_rotation, deltaTime, rotation_speed, keyboard
     
-    player = new Player("Images/HERO.jpg", startPos, 1000, 900, 0, dtAsSeconds, 220, keys);
-    IAs[0] = new Enemy("Images/Enemy.jpg", sf::Vector2f(80, 1600), 1000, 1000, 0, dtAsSeconds); //1000
-    IAs[1] = new Enemy("Images/Enemy.jpg", sf::Vector2f(150, 1700), 950, 900, 0, dtAsSeconds);  //900
+    player[0] = new Player(1, "Images/HERO.jpg", startPos, 1000, 900, 0, dtAsSeconds, 220, keys);
+    player[1] = new Player(2, "Images/HERO.jpg", sf::Vector2f(300, 1800), 1000, 900, 0, dtAsSeconds, 220, keys);
+    IAs[0] = new Enemy("Images/Enemy.jpg", sf::Vector2f(80, 1700), 1000, 1000, 0, dtAsSeconds); //1000
+    IAs[1] = new Enemy("Images/Enemy.jpg", sf::Vector2f(150, 1750), 950, 900, 0, dtAsSeconds);  //900
     IAs[2] = new Enemy("Images/Enemy.jpg", sf::Vector2f(180, 1650), 1000, 1000, 0, dtAsSeconds);    //1000
-    IAs[3] = new Enemy("Images/Enemy.jpg", sf::Vector2f(200, 1420), 980, 950, 0, dtAsSeconds);  //950
+    IAs[3] = new Enemy("Images/Enemy.jpg", sf::Vector2f(200, 1620), 980, 950, 0, dtAsSeconds);  //950
     
     Light = sf::Color(247, 233, 212);
     Dark = sf::Color(41, 39, 34);
@@ -84,38 +91,45 @@ window(sf::VideoMode(1200, 900), "MicroMachines - Neon Edition")
     //PUNTOS DE CONTROL
     control = new item [12];
     control[0] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 1308), 0, 1, 1, true, 45);
-    control[1] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(1308, 291.5), 0, 1, 1, true, 45);
-    control[2] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5460, 291.5), 0, 1, 1, true, 45);
-    control[3] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 943), 0, 1, 1, true, 45);
-    control[4] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 3284), 0, 1, 1, true, 45);
-    control[5] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5335, 4060.5), 0, 1, 1, true, 45);
-    control[6] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2705, 4060.5), 0, 1, 1, true, 45);
-    control[7] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3769), 0, 1, 1, true, 45);
-    control[8] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3286), 0, 1, 1, true, -45);
-    control[9] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2121, 2994.5), 0, 1, 1, true, -45);
-    control[10] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(583, 2994.5), 0, 1, 1, true, 45);
-    control[11] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 2702), 0, 1, 1, true, 45);
-  
+    control[1] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(1308, 291.5), 0, 1, 1, true, 90);
+    control[2] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5460, 291.5), 0, 1, 1, true, 135);
+    control[3] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 943), 0, 1, 1, true, 180);
+    control[4] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(6111.5, 3284), 0, 1, 1, true, 235);
+    control[5] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(5335, 4060.5), 0, 1, 1, true, 270);
+    control[6] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2705, 4060.5), 0, 1, 1, true, 315);
+    control[7] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3769), 0, 1, 1, true, 0);
+    control[8] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(2413.5, 3286), 0, 1, 1, true, 315);
+    control[9] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(2121, 2994.5), 0, 1, 1, true, 270);
+    control[10] = createHitbox(sf::Vector2f(5, 583), sf::Vector2f(583, 2994.5), 0, 1, 1, true, 315);
+    control[11] = createHitbox(sf::Vector2f(583, 5), sf::Vector2f(291.5, 2702), 0, 1, 1, true, 0);
     
-    std::string text;
+    JUMP = sf::RectangleShape(sf::Vector2f(350, 584));
+    JUMP.setOrigin(350/2, 584/2);
+    JUMP.setFillColor(sf::Color::Blue);
+    JUMP.setPosition(2800, 291.5);
+    
     for(int i = 0; i < N_IA; i++){
-        text = "IA #"+std::to_string(i+1);
-        leaderboard[i].nombre = text;
+        leaderboard[i].nombre = "IA #"+std::to_string(i+1);
         leaderboard[i].posicion = IAs[i]->getP_pos();
         leaderboard[i].target = IAs[i];
-        leaderboard[i].id = sf::Text(text, AssetManager::GetFont("Fonts/LemonMilk.otf"));
+        leaderboard[i].id = sf::Text("IA #"+std::to_string(i+1), AssetManager::GetFont("Fonts/LemonMilk.otf"));
         
         actual[i].position = previous[i].position = IAs[i]->getCar().getPosition();
         actual[i].rotation = previous[i].rotation = 0;
     }
     
-    actual[4].position = previous[4].position = player->getCar().getPosition();
-    actual[4].rotation = previous[4].rotation = 0;
-        
-    leaderboard[4].nombre = "Player";
-    leaderboard[4].posicion = player->getP_pos();
-    leaderboard[4].target = player;
-    leaderboard[4].id = sf::Text("Player", AssetManager::GetFont("Fonts/LemonMilk.otf"));  
+    for(int i = 0; i < N_PLAYERS; i++){
+        leaderboard[i+4].nombre = "Player " + std::to_string(i);
+        leaderboard[i+4].posicion = player[i]->getP_pos();
+        leaderboard[i+4].target = player[i];
+        leaderboard[i+4].id = sf::Text("Player " + std::to_string(i), AssetManager::GetFont("Fonts/LemonMilk.otf"));  
+
+        actual[i+4].position = previous[i+4].position = player[i]->getCar().getPosition();
+        actual[i+4].rotation = previous[i+4].rotation = 0;
+    
+    }
+    
+
     
 }
 
@@ -127,9 +141,9 @@ void Game::go(){
     while(window.isOpen()){
         handleEvents();
         //std::cout << "TIME: " << masterClock.getElapsedTime().asMilliseconds() << std::endl;
-        if(masterClock.getElapsedTime().asMilliseconds() > TICK){
+        if(masterClock.getElapsedTime().asMilliseconds() > TICK)
             update();
-        }
+        
         
         float tick = fmin(1.0f, ((float)(masterClock.getElapsedTime().asMilliseconds())/(float)(TICK)));
 
@@ -164,7 +178,7 @@ void Game::handleEvents(){
 }
 
 void Game::update(){                                                // <--------------------------------------------------------- UPDATE
-    std::cout << "UPDATE -- " << std::endl;
+    //std::cout << "UPDATE -- " << std::endl;
     /* REINICIO EL RELOJ */
     deltaTime = masterClock.restart();
     elapsedTime += deltaTime;
@@ -176,7 +190,9 @@ void Game::update(){                                                // <--------
     }
     
     /* MOVIMIENTO Y LÓGICA */
-    player->movement(); 
+    for(int i=0; i<N_PLAYERS; i++)
+        player[i]->movement(); 
+    
     for(int i= 0; i<4; i++)
         IAs[i]->logic();
    
@@ -184,55 +200,63 @@ void Game::update(){                                                // <--------
     checkPoints();
     checkCollisionsBetweeenHitbox();
     checkCollisionsBetweeenPlayers();
+    checkSpecialInteractions();
     burbuja();
     
     /* ACTUALIZO LA POSICIÓN SIGUIENTE */
-    actual[4].position = player->getCar().getPosition();
-    actual[4].rotation = player->getCar().getRotation();
 
     for(int i = 0; i < N_IA; i++){
         actual[i].position = IAs[i]->getCar().getPosition();
         actual[i].rotation = IAs[i]->getCar().getRotation();
     }
     
-    if(player->getVueltas() == 2){
+    for(int i=0; i< N_PLAYERS; i++){
+        actual[i+4].position = player[i]->getCar().getPosition();
+        actual[i+4].rotation = player[i]->getCar().getRotation();
+    }
+    
+    if(player[0]->getVueltas() == 2){
         window.close();
     }
     
 }
 
-void Game::render(float tick){                                       // <--------------------------------------------------------- RENDER
-    std::cout << "RENDER -- " << std::endl;
+void Game::render(float tick){                                       // <--------------------------------------------------------- RENDER =========================================================
+    //std::cout << "RENDER -- " << std::endl;
     window.clear(Dark);
     
 
     
     window.setView(view);
     window.draw(Cool_Map);
+    window.draw(JUMP);
+    renderPlayers(tick, 0);
+    renderEnemies(tick, 0);
     
+
     window.draw(leaderboard[0].id);
     window.draw(leaderboard[1].id);
     window.draw(leaderboard[2].id);
     window.draw(leaderboard[3].id);
     window.draw(leaderboard[4].id);
     
-    rendercontrol();
-    renderPlayers(tick);
-   
+    if(N_PLAYERS == 2){
+        
+    
+    /* CAMARA 2 */
     window.setView(view2);
     window.draw(Cool_Map);
-    renderPlayers2(tick);
+    window.draw(JUMP);
+    renderEnemies(tick, 1);
+    renderPlayers(tick, 1);
     
-    window.draw(player->getCar());
-    player->interpola(actual[4].position.x, actual[4].position.y, actual[4].rotation);
+
     
+    UI.setCenter(0, 0);
     window.setView(UI);
+    }
     /* POSICIONES EN LA CARRERA */
-    leaderboard[0].id.setPosition(sf::Vector2f(20, 450));
-    leaderboard[1].id.setPosition(sf::Vector2f(20, 400));
-    leaderboard[2].id.setPosition(sf::Vector2f(20, 350));
-    leaderboard[3].id.setPosition(sf::Vector2f(20, 300));
-    leaderboard[4].id.setPosition(sf::Vector2f(20, 250));
+   
 
    
     window.display();
@@ -245,43 +269,48 @@ void Game::rendercontrol(){
     }
 }
 
-void Game::renderPlayers(float tick){
+void Game::renderPlayers(float tick, int camera){
     
     float x;
     float y;
     float c;
     float s;
-
+    
+    
     for(int i = 0; i < N_PLAYERS; i++){
-        x = previous[4].position.x *(1-tick) + actual[4].position.x*tick;
-        y = previous[4].position.y *(1-tick) + actual[4].position.y*tick;
-        c = cos(previous[4].rotation *PI/180) * (1-tick) + cos(actual[4].rotation*PI/180)*tick;
-        s = sin(previous[4].rotation *PI/180) * (1-tick) + sin(actual[4].rotation*PI/180)*tick;
+        x = previous[(i+camera)%2+N_IA].position.x *(1-tick) + actual[(i+camera)%2+N_IA].position.x*tick;
+        y = previous[(i+camera)%2+N_IA].position.y *(1-tick) + actual[(i+camera)%2+N_IA].position.y*tick;
+        c = cos(previous[(i+camera)%2+N_IA].rotation *PI/180) * (1-tick) + cos(actual[(i+camera)%2+N_IA].rotation*PI/180)*tick;
+        s = sin(previous[(i+camera)%2+N_IA].rotation *PI/180) * (1-tick) + sin(actual[(i+camera)%2+N_IA].rotation*PI/180)*tick;
 
         //std::cout << "Tick " << tick << std::endl; 
         //std::cout << "Previous: " << previous[4].position.x << ", " << previous[4].position.y << " | Actual: " << actual[4].position.x << ", " << actual[4].position.y << std::endl;
         //std::cout << "Interpolated -----: " << x << ", " << y << std::endl;
-        player->interpola(x, y, atan2(s,c)*180/PI);  
-        view.setCenter(player->getCar().getPosition());
-        window.setView(view);
-        window.draw(player->getCar());
-        //std::cout << "CAR ----- " << player->getCar().getPosition().x << ", " << player->getCar().getPosition().y << std::endl << std::endl;
+        player[(i+camera)%2]->interpola(x, y, atan2(s,c)*180/PI);  
+        
+        if((i+camera)%2 == 0 && camera == 0){
+            view.setCenter(player[(i+camera)%2]->getCar().getPosition());
+            window.setView(view);
+            leaderboard[0].id.setPosition(player[0]->getCar().getPosition() - sf::Vector2f(650, 250));
+            leaderboard[1].id.setPosition(player[0]->getCar().getPosition() - sf::Vector2f(650, 200));
+            leaderboard[2].id.setPosition(player[0]->getCar().getPosition() - sf::Vector2f(650, 150));
+            leaderboard[3].id.setPosition(player[0]->getCar().getPosition() - sf::Vector2f(650, 100));
+            leaderboard[4].id.setPosition(player[0]->getCar().getPosition() - sf::Vector2f(650, 50));
+        }
+        else if((i+camera)%2 == 1 && camera == 1){
+            view2.setCenter(player[(i+camera)%2]->getCar().getPosition());
+            window.setView(view2);
+        }
+        window.draw(player[(i+camera)%2]->getCar());
+        player[(i+camera)%2]->interpola(actual[(i+camera)%2+N_IA].position.x, actual[(i+camera)%2+N_IA].position.y, actual[(i+camera)%2+N_IA].rotation);
+        //std::cout << "CAR ----- " << player[0]->getCar().getPosition().x << ", " << player[0]->getCar().getPosition().y << std::endl << std::endl;
     }
 
-    for(int i=0; i< N_IA; i++){
-        x = previous[i].position.x *(1-tick) + actual[i].position.x*tick;
-        y = previous[i].position.y *(1-tick) + actual[i].position.y*tick;
-        c = cos(previous[i].rotation *PI/180) * (1-tick) + cos(actual[i].rotation*PI/180)*tick;
-        s = sin(previous[i].rotation *PI/180) * (1-tick) + sin(actual[i].rotation*PI/180)*tick;
-        
-        IAs[i]->interpola(x, y, atan2(s,c)*180/PI);
-        window.draw(IAs[i]->getCar());
-        IAs[i]->interpola(actual[i].position.x, actual[i].position.y, actual[i].rotation);
-    }
+
         
 }
 
-void Game::renderPlayers2(float tick){
+void Game::renderEnemies(float tick, int camera){
     
     float x;
     float y;
@@ -294,22 +323,10 @@ void Game::renderPlayers2(float tick){
         c = cos(previous[i].rotation *PI/180) * (1-tick) + cos(actual[i].rotation*PI/180)*tick;
         s = sin(previous[i].rotation *PI/180) * (1-tick) + sin(actual[i].rotation*PI/180)*tick;
         
-        IAs[i]->interpola(x, y, atan2(s,c)*180/PI);
-        if(i==0){
-            view2.setCenter(IAs[0]->getCar().getPosition());
-            window.setView(view2);
-        }
+       IAs[i]->interpola(x, y, atan2(s,c)*180/PI);
+       
         window.draw(IAs[i]->getCar());
-        IAs[i]->interpola(actual[i].position.x, actual[i].position.y, actual[i].rotation);
-    }
-    
-    for(int i = 0; i < N_PLAYERS; i++){
-        x = previous[4].position.x *(1-tick) + actual[4].position.x*tick;
-        y = previous[4].position.y *(1-tick) + actual[4].position.y*tick;
-        c = cos(previous[4].rotation *PI/180) * (1-tick) + cos(actual[4].rotation*PI/180)*tick;
-        s = sin(previous[4].rotation *PI/180) * (1-tick) + sin(actual[4].rotation*PI/180)*tick;
-        
-        player->interpola(x, y, atan2(s,c)*180/PI);  
+       IAs[i]->interpola(actual[i].position.x, actual[i].position.y, actual[i].rotation);
     }
 
         
@@ -333,28 +350,28 @@ void Game::checkPoints(){
         }
     }
     
-    j = player->getPosition() % 12;
-    if(player->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds()) && !player->getFlag(j) && player->handleIncremenet(j)){
-         player->setCheckPoint(j, true);
-         player->setVisited(j);
-         player->incrementPosition(1);
+    j = player[0]->getPosition() % 12;
+    if(player[0]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds()) && !player[0]->getFlag(j) && player[0]->handleIncremenet(j)){
+         player[0]->setCheckPoint(j, true);
+         player[0]->setVisited(j);
+         player[0]->incrementPosition(1);
 
      }
-     else if(!(player->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds())))
-         player->setCheckPoint(j, false);    
+     else if(!(player[0]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds())))
+         player[0]->setCheckPoint(j, false);    
 }
 
 void Game::checkCollisionsBetweeenHitbox(){
+    SAT::MTV Sat_result;
     /* PARA CADA COLLIDER */
     for(int i = 0; i < 15; i++){
-        
         /* PARA CADA JUGADOR */
         for(int j = 0; j<N_PLAYERS ; j++){
-            if((Sat_result = Sat.collides(player->getVertex(), hit[i].vertex)).collides){
+            if((Sat_result = Sat.collides(player[j]->getVertex(), hit[i].vertex)).collides){
                 Sat_result.axis.x = hit[i].sx * abs(Sat_result.axis.x);
                 Sat_result.axis.y = hit[i].sy * abs(Sat_result.axis.y);
                 //std::cout << "MTV - Axis: " << Sat_result.axis.x << ", " << Sat_result.axis.y << std::endl;
-                player->handleHitboxCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount,  Sat_result.axis.y*Sat_result.amount), Sat_result.axis);
+                player[j]->handleHitboxCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount,  Sat_result.axis.y*Sat_result.amount), Sat_result.axis);
             }
         }
         
@@ -372,18 +389,19 @@ void Game::checkCollisionsBetweeenHitbox(){
 void Game::checkCollisionsBetweeenPlayers(){
     float x;
     float y;
+    SAT::MTV Sat_result;
     for(int i=0; i< N_IA; i++){
         for(int j = 0; j<N_IA && i!=j; j++){
             if((Sat_result = Sat.collides(IAs[i]->getVertex(), IAs[j]->getVertex())).collides){
                 x = (IAs[i]->getCar().getPosition().x > IAs[j]->getCar().getPosition().x) ? 1 : -1;
                 y = (IAs[i]->getCar().getPosition().y > IAs[j]->getCar().getPosition().y) ? 1 : -1;
 
-                IAs[i]->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*x,  Sat_result.axis.y*y), Sat_result.axis);
+                IAs[i]->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*x*Sat_result.amount,  Sat_result.axis.y*y*Sat_result.amount), Sat_result.axis);
             }
            
-            if((Sat_result = Sat.collides(IAs[i]->getVertex(), player->getVertex())).collides){
-                x = (IAs[i]->getCar().getPosition().x > player->getCar().getPosition().x) ? 1 : -1;
-                y = (IAs[i]->getCar().getPosition().y > player->getCar().getPosition().y) ? 1 : -1;
+            if((Sat_result = Sat.collides(IAs[i]->getVertex(), player[0]->getVertex())).collides){
+                x = (IAs[i]->getCar().getPosition().x > player[0]->getCar().getPosition().x) ? 1 : -1;
+                y = (IAs[i]->getCar().getPosition().y > player[0]->getCar().getPosition().y) ? 1 : -1;
 
                 IAs[i]->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount*x,  Sat_result.axis.y*Sat_result.amount*y), Sat_result.axis);
             }
@@ -392,14 +410,20 @@ void Game::checkCollisionsBetweeenPlayers(){
     }
     
     for(int i=0; i< N_IA; i++){
-        if((Sat_result = Sat.collides(player->getVertex(), IAs[i]->getVertex())).collides){
-            x = (player->getCar().getPosition().x > IAs[i]->getCar().getPosition().x) ? 1 : -1;
-            y = (player->getCar().getPosition().y > IAs[i]->getCar().getPosition().y) ? 1 : -1;
+        if((Sat_result = Sat.collides(player[0]->getVertex(), IAs[i]->getVertex())).collides){
+            x = (player[0]->getCar().getPosition().x > IAs[i]->getCar().getPosition().x) ? 1 : -1;
+            y = (player[0]->getCar().getPosition().y > IAs[i]->getCar().getPosition().y) ? 1 : -1;
             
-            player->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount*x,  Sat_result.axis.y*Sat_result.amount*y), Sat_result.axis);
+            player[0]->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount*x,  Sat_result.axis.y*Sat_result.amount*y), Sat_result.axis);
         }
     }
     
+}
+
+void Game::checkSpecialInteractions(){
+    if(player[0]->getCar().getGlobalBounds().intersects(JUMP.getGlobalBounds())){
+        std::cout << "Endl" << std::endl;
+    }
 }
 
 

@@ -23,6 +23,8 @@
 
 class Game {
 private:
+    const float PI = 3.14159265;
+    
     int N_IA;
     int N_PLAYERS;
     sf::RenderWindow window;
@@ -35,17 +37,16 @@ private:
     float* dtAsSeconds;
     
     Enemy* IAs[4];
-    Player* player;
+    Player* player[2];
     
     struct State{
         sf::Vector2f position;
         float rotation;
     };
-    State previous[5];
-    State actual[5];
+    State previous[6];
+    State actual[6];
     
     SAT Sat;
-    SAT::MTV Sat_result;;
     
     AssetManager manager;
     sf::Clock masterClock;
@@ -55,9 +56,7 @@ private:
     //sf::RectangleShape* hitbox;
     sf::Color Dark;
     sf::Color Light;
-    
-    const float PI = 3.14159265;
-    
+
     struct item{
         sf::RectangleShape figure;
         sf::Vector2f* vertex;
@@ -68,6 +67,7 @@ private:
     
     item hit [15];
     item* control;
+    sf::RectangleShape JUMP;
     
     struct namepos{
         sf::Text id;
@@ -75,7 +75,7 @@ private:
         int* posicion;
         Car* target;
     };
-    namepos leaderboard[5];
+    namepos leaderboard[6];
     
 public:
     Game(int N, int IA);
@@ -89,12 +89,13 @@ private:
     void update();
     void render(float tick);
     void rendercontrol();
-    void renderPlayers(float tick);
-    void renderPlayers2(float tick);
+    void renderPlayers(float tick, int camera);
+    void renderEnemies(float tick, int camera);
     
     void checkPoints();
     void checkCollisionsBetweeenHitbox();
     void checkCollisionsBetweeenPlayers();
+    void checkSpecialInteractions();
     void burbuja();
     
     /* CREATE MAP */

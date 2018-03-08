@@ -23,10 +23,10 @@ class Player : public Car {
 private:
     sf::Vector2f dir;
     bool* keys;
-    float ROTATION;
+    int keyIDs [4];
     
 public:
-    Player(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt, float r_speed, bool* keyboard);
+    Player(int nPlayer, std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float* dt, float r_speed, bool* keyboard);
     void movement();
     
 };
