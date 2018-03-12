@@ -5,7 +5,7 @@
  */
 
 
-//Esta clase forma parte del libro "SFML Essentials para optimizar la carga de texturasd
+//Esta clase forma parte del libro "SFML Essentials" para optimizar la carga de texturas
 
 #include "AssetManager.h"
 #include <assert.h>

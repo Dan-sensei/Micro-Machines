@@ -30,6 +30,7 @@ protected:
     float AC;
     float MAXSPEED;
     float ROTATION;
+    float maxSize;
     
     float* deltaTime;
     
@@ -43,6 +44,7 @@ protected:
     bool visited [12];
     
     bool onAir;
+    bool weReGoingDown;
     
 public:
     Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S, float acceleration, float rotation, float RootS, float* dt);
@@ -61,8 +63,8 @@ public:
     void setVisited(int i);
     bool handleIncremenet(int i);
     void handleHitboxCollision(sf::Vector2f pos, sf::Vector2f axis);
-    void handlePlayersCollision(sf::Vector2f pos, sf::Vector2f axis);
-    void interpola(float x, float y, float r);
+    void handlePlayersCollision(sf::Vector2f pos);
+    void interpola(float x, float y, float r, float s);
     
     int getVueltas();
     bool isOnAir();

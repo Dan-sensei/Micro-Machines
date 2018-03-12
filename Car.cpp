@@ -26,7 +26,9 @@ Car::Car(std::string const& sprite_name, sf::Vector2f startPosition, float MAX_S
     SPEED = 0;
     MAXSPEED = MAX_S;
     AC = acceleration; 
+    maxSize = 1.7;
     onAir = false;
+    weReGoingDown = false;
     
     vertex = new sf::Vector2f[4];
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
@@ -128,9 +130,8 @@ void Car::handleHitboxCollision(sf::Vector2f pos, sf::Vector2f axis){
     SPEED -= SPEED*abs(dot)*0.3;
 }
 
-void Car::handlePlayersCollision(sf::Vector2f pos, sf::Vector2f axis){
+void Car::handlePlayersCollision(sf::Vector2f pos){
     car.move(pos.x, pos.y);
-
     SPEED -= SPEED*0.1;
 }
 
@@ -138,9 +139,10 @@ int Car::getVueltas(){
     return vueltas;
 }
 
-void Car::interpola(float x, float y, float r){
+void Car::interpola(float x, float y, float r, float s){
     car.setPosition(x, y);
     car.setRotation(r);
+    car.setScale(s, s);
 }
 
 bool Car::isOnAir(){

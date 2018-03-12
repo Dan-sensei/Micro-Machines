@@ -20,6 +20,7 @@
 #include "Enemy.h"
 #include <math.h>
 #include "SAT.h"
+#include "Animator.h"
 
 class Game {
 private:
@@ -30,7 +31,11 @@ private:
     int VUELTAS;
     
     std::string winner;
+    sf::Sprite sprite;
+    sf::RectangleShape turboPos[6];
     
+    Animator animator;
+    Animator::Animation* turbo;
     sf::RenderWindow window;
     sf::View view;
     sf::View view2;
@@ -46,6 +51,7 @@ private:
     struct State{
         sf::Vector2f position;
         float rotation;
+        float scale;
     };
     State previous[6];
     State actual[6];
@@ -54,11 +60,10 @@ private:
     
     AssetManager manager;
     sf::Clock masterClock;
+    sf::Clock normalClock;
     sf::Time deltaTime;
     sf::Time elapsedTime;
 
-    
-    //sf::RectangleShape* hitbox;
     sf::Color Dark;
     sf::Color Light;
 
@@ -106,6 +111,7 @@ private:
     
     /* CREATE MAP */
     item createHitbox(sf::Vector2f wallSize, sf::Vector2f pos, float rotation, int sx, int sy, bool center, float rot);
+    sf::RectangleShape createTurbo(sf::Vector2f size, sf::Vector2f pos, float rotation);
 };
 
 #endif /* GAME_H */

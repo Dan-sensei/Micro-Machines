@@ -49,12 +49,17 @@ void Player::movement() {
         SPEED -= AC*deltaTime[0];
     }
 
-    
     if( keys[keyIDs[2]]){       //IZQUIERDA
-        car.rotate(-ROTATION*deltaTime[0]*SPEED*(1/MAXSPEED));
+        if(MAXSPEED - SPEED < -40)
+            car.rotate(-(ROTATION*0.5)*deltaTime[0]);
+        else
+            car.rotate(-ROTATION*deltaTime[0]*(SPEED/MAXSPEED));
     }     
     else if( keys[keyIDs[3]]){       //DERECHA
-        car.rotate(ROTATION*deltaTime[0]*SPEED*(1/MAXSPEED));
+        if(MAXSPEED - SPEED < -40)
+            car.rotate((ROTATION*0.5)*deltaTime[0]);
+        else
+            car.rotate(ROTATION*deltaTime[0]*(SPEED/MAXSPEED));
     }        
     
     if(SPEED > MAXSPEED)
@@ -62,6 +67,23 @@ void Player::movement() {
     else if(SPEED < -MAXSPEED)
         SPEED += 500*deltaTime[0];
 
+    
+    
+    
+    if(onAir && !weReGoingDown && car.getScale().x < maxSize){
+        car.setScale(car.getScale().x+deltaTime[0], car.getScale().y+deltaTime[0]);
+        if(car.getScale().x > maxSize)
+            weReGoingDown = true;
+    }
+    if (weReGoingDown && car.getScale().x > 1){
+        car.setScale(car.getScale().x-deltaTime[0], car.getScale().y-deltaTime[0]);
+    }
+    
+    if(car.getScale().x < 1){
+        onAir = false;
+        weReGoingDown = false;
+        car.setScale(1, 1);
+    }
     //std::cout << "Speed: " << SPEED << " | Dir: " << dir.x << ", " << dir.y << std::endl;
     
     

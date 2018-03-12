@@ -12,19 +12,13 @@
  */
 
 #include <cstdlib>
-
 #include "Game.h"
-
-using namespace std;
-/*
- * 
- */
 
 int main(int argc, char** argv) {
 
     //JUGADORES HUMANOS [1, 2] , VUELTAS
-    Game game(2, 2);
-    game.go();
+        Game game       (1     ,    2);
+        game.go();
     
 }
 

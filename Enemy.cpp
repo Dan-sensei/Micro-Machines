@@ -49,9 +49,25 @@ void Enemy::logic(){
     car.move(dir*deltaTime[0]);
     
     if(SPEED > MAXSPEED)
-        SPEED -= 500*deltaTime[0];
+        SPEED -= 900*deltaTime[0];
     else if(SPEED < -MAXSPEED)
-        SPEED += 500*deltaTime[0];
+        SPEED += 900*deltaTime[0];
+    
+    
+    if(onAir && !weReGoingDown && car.getScale().x < maxSize){
+        car.setScale(car.getScale().x+deltaTime[0], car.getScale().y+deltaTime[0]);
+        if(car.getScale().x > maxSize)
+            weReGoingDown = true;
+    }
+    if (weReGoingDown && car.getScale().x > 1){
+        car.setScale(car.getScale().x-deltaTime[0], car.getScale().y-deltaTime[0]);
+    }
+    
+    if(car.getScale().x < 1){
+        onAir = false;
+        weReGoingDown = false;
+        car.setScale(1, 1);
+    }
     
     vertex[0] = sf::Vector2f(car.getPosition().x - cos(car.getRotation()*PI/180) * (size.x*0.5), car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5));
     vertex[1] = sf::Vector2f(car.getPosition().x + sin(car.getRotation()*PI/180) * size.y - cos(car.getRotation()*PI/180) * size.x*0.5, car.getPosition().y - sin(car.getRotation()*PI/180) * (size.x*0.5)-cos(car.getRotation()*PI/180) * size.y);
