@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Animator.o \
 	${OBJECTDIR}/AssetManager.o \
 	${OBJECTDIR}/Car.o \
-	${OBJECTDIR}/Collect.o \
 	${OBJECTDIR}/Enemy.o \
 	${OBJECTDIR}/Game.o \
 	${OBJECTDIR}/Player.o \
@@ -84,11 +83,6 @@ ${OBJECTDIR}/Car.o: Car.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Car.o Car.cpp
-
-${OBJECTDIR}/Collect.o: Collect.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Collect.o Collect.cpp
 
 ${OBJECTDIR}/Enemy.o: Enemy.cpp
 	${MKDIR} -p ${OBJECTDIR}

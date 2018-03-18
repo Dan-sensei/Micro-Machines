@@ -15,6 +15,7 @@
 #define GAME_H
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 #include "Player.h"
 #include "Enemy.h"
@@ -30,7 +31,8 @@ private:
     int N_PLAYERS;
     int VUELTAS;
     
-    std::string winner;
+    sf::Sprite winner;
+    bool finisher;
     sf::Sprite sprite;
     sf::RectangleShape turboPos[6];
     
@@ -41,6 +43,7 @@ private:
     sf::View view2;
     sf::View UI;
     sf::Sprite Cool_Map;
+    sf::Sprite BACKGROUND;
     
     bool* keys;
     float* dtAsSeconds;
@@ -63,7 +66,12 @@ private:
     sf::Clock normalClock;
     sf::Time deltaTime;
     sf::Time elapsedTime;
-
+    
+    sf::Sound TURBO_SOUND;
+    sf::Music NIGHT_OF_FIRE;
+    sf::Music AHH_BITCONNEEEEEECT;
+    sf::Music MRKRAB_VIOLIN;
+    
     sf::Color Dark;
     sf::Color Light;
 
@@ -80,8 +88,7 @@ private:
     sf::RectangleShape JUMP;
     
     struct namepos{
-        sf::Text id;
-        std::string nombre;
+        sf::Sprite picture;
         int* posicion;
         Car* target;
     };

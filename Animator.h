@@ -39,8 +39,6 @@ public:
         void AddFrames(const sf::Vector2i& startFrom, const sf::Vector2i& frameSize, unsigned int nFrames){
             sf::Vector2i currentFrame = startFrom;
             for(unsigned int i = 0; i < nFrames; i++){
-                std::cout << "CURERNT " << currentFrame.x << ", " << currentFrame.y << std::endl;
-                std::cout << "SIZE " << frameSize.x << ", " << frameSize.y << std::endl;
                 animFrames.push_back(sf::IntRect(currentFrame.x, currentFrame.y, frameSize.x, frameSize.y));
                 currentFrame.x += frameSize.x;
             }

@@ -51,13 +51,13 @@ void Player::movement() {
 
     if( keys[keyIDs[2]]){       //IZQUIERDA
         if(MAXSPEED - SPEED < -40)
-            car.rotate(-(ROTATION*0.5)*deltaTime[0]);
+            car.rotate(-ROTATION*deltaTime[0]);
         else
             car.rotate(-ROTATION*deltaTime[0]*(SPEED/MAXSPEED));
     }     
     else if( keys[keyIDs[3]]){       //DERECHA
         if(MAXSPEED - SPEED < -40)
-            car.rotate((ROTATION*0.5)*deltaTime[0]);
+            car.rotate(ROTATION*deltaTime[0]);
         else
             car.rotate(ROTATION*deltaTime[0]*(SPEED/MAXSPEED));
     }        

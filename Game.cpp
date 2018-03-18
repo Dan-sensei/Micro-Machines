@@ -16,7 +16,7 @@
 
 #include "Game.h"
 
-#define TICK 1000/25
+#define TICK 1000/35
 
 Game::Game(int N, int nVueltas):
 window(sf::VideoMode(1200, 900), "MicroMachines - Neon Edition"),
@@ -29,8 +29,6 @@ animator(sprite)
     VUELTAS = nVueltas;
     
     sf::Vector2f startPos = sf::Vector2f(200, 1850);
-    
-    std::cout << "WIDTH " << window.getSize().x << " | HEIGHT " <<window.getSize().y << std::endl;
     
     UI = sf::View(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     UI.setCenter(startPos);
@@ -52,8 +50,10 @@ animator(sprite)
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
     
-    Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/New.jpg")); 
-
+    Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/ULTIMATE_MAP.png"));
+    BACKGROUND = sf::Sprite (AssetManager::GetTexture("Images/BACKGROUND.jpg"));
+    BACKGROUND.setOrigin(4471, 3284.5);
+    BACKGROUND.setPosition(3800, 1835);
     window.setView(view);  
     
     keys = new bool[256];
@@ -64,11 +64,11 @@ animator(sprite)
     //sprite_name, startPosition, MAX_SPEED, acceleration, Initial_rotation, deltaTime, rotation_speed, keyboard
     
     player[0] = new Player(1, "Images/HERO.jpg", startPos, 1000, 900, 0, dtAsSeconds, 200, keys);
-    player[1] = new Player(2, "Images/Enemy.jpg", sf::Vector2f(400, 1950), 1000, 900, 0, dtAsSeconds, 220, keys);
-    IAs[0] = new Enemy("Images/Enemy.jpg", sf::Vector2f(400, 1750), 950, 1000, 0, dtAsSeconds); //1000
-    IAs[1] = new Enemy("Images/Enemy.jpg", sf::Vector2f(400, 1550), 920, 900, 0, dtAsSeconds);  //900
-    IAs[2] = new Enemy("Images/Enemy.jpg", sf::Vector2f(200, 1650), 900, 1000, 0, dtAsSeconds);    //1000
-    IAs[3] = new Enemy("Images/Enemy.jpg", sf::Vector2f(200, 1450), 980, 950, 0, dtAsSeconds);  //950
+    player[1] = new Player(2, "Images/HERO_2.jpg", sf::Vector2f(400, 1950), 1000, 900, 0, dtAsSeconds, 220, keys);
+    IAs[0] = new Enemy("Images/BOSS.jpg", sf::Vector2f(400, 1550), 950, 1050, 0, dtAsSeconds); //1000
+    IAs[1] = new Enemy("Images/IA1.jpg", sf::Vector2f(400, 1750), 920, 900, 0, dtAsSeconds);  //900
+    IAs[2] = new Enemy("Images/IA2.jpg", sf::Vector2f(200, 1650), 900, 1000, 0, dtAsSeconds);    //1000
+    IAs[3] = new Enemy("Images/IA3.jpg", sf::Vector2f(200, 1450), 980, 950, 0, dtAsSeconds);  //950
     
     Light = sf::Color(247, 233, 212);
     Dark = sf::Color(41, 39, 34);
@@ -109,7 +109,7 @@ animator(sprite)
     JUMP = sf::RectangleShape(sf::Vector2f(350, 584));
     JUMP.setOrigin(350/2, 584/2);
     JUMP.setFillColor(sf::Color::Blue);
-    JUMP.setPosition(2600, 291.5);
+    JUMP.setPosition(3300, 291.5);
     
     //TURBOS
     turboPos[0] = createTurbo(sf::Vector2f(50, 583), sf::Vector2f(1700, 291.5), 0);
@@ -120,10 +120,11 @@ animator(sprite)
     turboPos[5] = createTurbo(sf::Vector2f(50, 583), sf::Vector2f(291.5, 2402), 270);
     
     for(int i = 0; i < N_IA; i++){
-        leaderboard[i].nombre = "IA #"+std::to_string(i+1);
+        leaderboard[i].picture = IAs[i]->getCar();
+        leaderboard[i].picture.scale(0.6, 0.6);
+        leaderboard[i].picture.setOrigin(30, 30);
         leaderboard[i].posicion = IAs[i]->getP_pos();
         leaderboard[i].target = IAs[i];
-        leaderboard[i].id = sf::Text("IA #"+std::to_string(i+1), AssetManager::GetFont("Fonts/LemonMilk.otf"));
         
         actual[i].position = previous[i].position = IAs[i]->getCar().getPosition();
         actual[i].rotation = previous[i].rotation = 0;
@@ -131,17 +132,18 @@ animator(sprite)
     }
     
     for(int i = 0; i < N_PLAYERS; i++){
-        leaderboard[i+4].nombre = "Player " + std::to_string(i);
+        leaderboard[i+4].picture = player[i]->getCar();
+        leaderboard[i+4].picture.scale(0.6, 0.6);
+        leaderboard[i+4].picture.setOrigin(30, 30);
         leaderboard[i+4].posicion = player[i]->getP_pos();
         leaderboard[i+4].target = player[i];
-        leaderboard[i+4].id = sf::Text("Player " + std::to_string(i), AssetManager::GetFont("Fonts/LemonMilk.otf"));  
 
         actual[i+4].position = previous[i+4].position = player[i]->getCar().getPosition();
         actual[i+4].rotation = previous[i+4].rotation = 0;
         actual[i+4].scale = previous[i+4].scale = 1;
     }
     
-    winner = "";
+
     
     sf::Vector2i size(244, 489);
     turbo = &animator.createAnimation("Turbo", "Images/TURBO.png", sf::seconds(2), true);
@@ -149,6 +151,9 @@ animator(sprite)
     sprite.setOrigin(size.x*0.5, size.y*0.5);
     sprite.scale(0.5, 1.19);
     sprite.setPosition(1600, 291.5);
+    
+    TURBO_SOUND.setBuffer(AssetManager::GetSoundBuffer("Sounds/TURBO.ogg"));
+    finisher = false;
 }
 
 Game::~Game() {
@@ -157,13 +162,23 @@ Game::~Game() {
 void Game::go(){
     masterClock.restart();
     
+    sf::Sound COUNTDOWN(AssetManager::GetSoundBuffer("Sounds/COUNTDOWN.ogg"));
+    float flag = 0.0;
     /* COUNTDOWN! */
-    while(elapsedTime.asSeconds() < 3){
+    while(elapsedTime.asSeconds() < 3 && window.isOpen()){
         render_init();
+        if(flag < elapsedTime.asSeconds()){
+            COUNTDOWN.play();
+            flag += 1;
+        }
         elapsedTime += masterClock.restart();
         handleEvents();
     }
-
+    
+    if(!NIGHT_OF_FIRE.openFromFile("Sounds/NIGHT_OF_FIRE.ogg")){
+        std::cout << "Error al cargar la música." << std::endl;
+    }
+    NIGHT_OF_FIRE.play();
     while(window.isOpen()){
     //std::cout << "MASTER " << masterClock.getElapsedTime().asSeconds() << std::endl;
         handleEvents();
@@ -191,7 +206,7 @@ void Game::handleEvents(){
             case sf::Event::EventType::KeyPressed:
                 std::cout<< "Tecla " << event.key.code << std::endl;
                 keys[event.key.code]= true;
-                if(keys[16]) window.close();        //Cerrar
+                if(keys[16]) window.close();        // Q: Cerrar
                 break;
 
             case sf::Event::KeyReleased:
@@ -228,15 +243,20 @@ void Game::update(){                                                // <--------
     checkCollisionsBetweeenPlayers();
     checkSpecialInteractions();
     burbuja();
-    
+
     /* ACTUALIZO LA POSICIÓN SIGUIENTE */
     for(int i = 0; i < N_IA; i++){
         actual[i].position = IAs[i]->getCar().getPosition();
         actual[i].rotation = IAs[i]->getCar().getRotation();
         actual[i].scale = IAs[i]->getCar().getScale().x;
 
-        if(IAs[i]->getVueltas() == VUELTAS && winner == "")
-            winner = "WINNER: " + leaderboard[0].id.getString();
+        if(IAs[i]->getVueltas() == VUELTAS && !finisher){
+            finisher = true;
+            winner = leaderboard[0].picture;
+            NIGHT_OF_FIRE.stop();
+            MRKRAB_VIOLIN.openFromFile("Sounds/MRKRAB_VIOLIN.ogg");
+            MRKRAB_VIOLIN.play();
+        }
     }
     
     for(int i=0; i< N_PLAYERS; i++){
@@ -244,10 +264,14 @@ void Game::update(){                                                // <--------
         actual[i+4].rotation = player[i]->getCar().getRotation();
         actual[i+4].scale = player[i]->getCar().getScale().x;
 
-        if(player[i]->getVueltas() == VUELTAS && winner == "")
-            winner = "WINNER: " + leaderboard[0].id.getString();
+        if(player[i]->getVueltas() == VUELTAS && !finisher){
+            finisher = true;
+            winner = leaderboard[0].picture;
+            NIGHT_OF_FIRE.stop();
+            AHH_BITCONNEEEEEECT.openFromFile("Sounds/AHH_BITCONNEEEEEECT.ogg");
+            AHH_BITCONNEEEEEECT.play();
+        }
     }
-    
 }
 
 void Game::render_init(){
@@ -255,6 +279,7 @@ void Game::render_init(){
     animator.update(auxDT);
     window.clear(Dark);
     window.setView(view);
+    window.draw(BACKGROUND);
     window.draw(Cool_Map);
     window.draw(control[0].figure);
     for(int i = 0; i< 6; i++){
@@ -267,6 +292,7 @@ void Game::render_init(){
     
     if(N_PLAYERS > 1){
         window.setView(view2);
+        window.draw(BACKGROUND);
         window.draw(Cool_Map);
         window.draw(control[0].figure);
         for(int i = 0; i< 6; i++){
@@ -283,7 +309,7 @@ void Game::render_init(){
     
     countdown.setCharacterSize(150);
     countdown.setPosition(view.getCenter().x, view.getCenter().y-150);
-    countdown.setFillColor(Dark);
+    countdown.setFillColor(Light);
     window.draw(countdown);
     window.display();
 }
@@ -295,8 +321,8 @@ void Game::render(float tick){                                       // <-------
     window.clear(Dark);
     
     window.setView(view);
+    window.draw(BACKGROUND);
     window.draw(Cool_Map);
-    window.draw(JUMP);
     window.draw(control[0].figure);
 
     for(int i = 0; i< 6; i++){
@@ -304,10 +330,11 @@ void Game::render(float tick){                                       // <-------
         sprite.setPosition(turboPos[i].getPosition());
         window.draw(sprite, sf::BlendAdd);
     }
-    //std::cout << "ANIM " << animator.getCurrentAnimation() << std::endl;
+    
     renderPlayers(tick, 0);
     renderEnemies(tick);
-    sf::Text vueltas = sf::Text("", AssetManager::GetFont("Fonts/LemonMilk.otf")); 
+    sf::Text vueltas = sf::Text("", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+    
     /* POSICIONES EN LA CARRERA */
     int map = 80;
     vueltas.setPosition(window.mapPixelToCoords(sf::Vector2i(10, 20)));
@@ -315,8 +342,11 @@ void Game::render(float tick){                                       // <-------
     window.draw(vueltas);
     sf::Text display;
     for(int i = 0; i < (N_IA+N_PLAYERS); i++){
-        display = sf::Text(std::to_string(i+1)+" - " + leaderboard[i].id.getString(), AssetManager::GetFont("Fonts/LemonMilk.otf")); 
-        display.setPosition(window.mapPixelToCoords(sf::Vector2i(10, map)));
+        display = sf::Text(std::to_string(i+1)+" - ", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+        display.setOrigin(display.getLocalBounds().width/2, display.getLocalBounds().height/2);
+        display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map)));
+        leaderboard[i].picture.setPosition(window.mapPixelToCoords(sf::Vector2i(70, map)));
+        window.draw(leaderboard[i].picture);
         window.draw(display);
         map+=30;
     }
@@ -324,8 +354,8 @@ void Game::render(float tick){                                       // <-------
     if(N_PLAYERS == 2){
         /* CAMARA 2 */
         window.setView(view2);
+        window.draw(BACKGROUND);
         window.draw(Cool_Map);
-        window.draw(JUMP);
         window.draw(control[0].figure);
         for(int i = 0; i< 6; i++){
             sprite.setRotation(turboPos[i].getRotation());
@@ -336,23 +366,30 @@ void Game::render(float tick){                                       // <-------
         renderEnemies(tick);
         map = 540;
         vueltas.setPosition(window.mapPixelToCoords(sf::Vector2i(10, 470)));
-        vueltas.setString( "VUELTA "+std::to_string(player[0]->getVueltas()) + " / " +std::to_string(VUELTAS) );
+        vueltas.setString( "VUELTA "+std::to_string(player[1]->getVueltas()) + " / " +std::to_string(VUELTAS) );
         window.draw(vueltas);
         for(int i = 0; i < (N_IA+N_PLAYERS); i++){
-            display = sf::Text(std::to_string(i+1)+" - " + leaderboard[i].id.getString(), AssetManager::GetFont("Fonts/LemonMilk.otf")); 
-            display.setPosition(window.mapPixelToCoords(sf::Vector2i(10, map)));
+            display = sf::Text(std::to_string(i+1)+" - ", AssetManager::GetFont("Fonts/LemonMilk.otf"));
+            display.setOrigin(display.getLocalBounds().width/2, display.getLocalBounds().height/2);
+            display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map)));
+            leaderboard[i].picture.setPosition(window.mapPixelToCoords(sf::Vector2i(70, map)));
+            window.draw(leaderboard[i].picture);
             window.draw(display);
             map+=30;
         }
     }
     
     window.setView(UI);
-    if(!winner.empty()){
-        sf::Text win = sf::Text(winner, AssetManager::GetFont("Fonts/LemonMilk.otf"));  
-    
+    if(finisher){
+        sf::Text win = sf::Text("WINNER", AssetManager::GetFont("Fonts/LemonMilk.otf"));  
         win.setCharacterSize(75);
-        win.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2-250, window.getSize().y/2-50)));
-        win.setFillColor(sf::Color::White);
+        win.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2-300, window.getSize().y/2-50)));
+        win.setFillColor(Light);
+        
+        
+        winner.setScale(2, 2);
+        winner.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2+100, window.getSize().y/2-10)));
+        window.draw(winner);
         window.draw(win);
        
     }
@@ -365,8 +402,7 @@ void Game::rendercontrol(){
         window.draw(control[i].figure);
 }
 
-void Game::renderPlayers(float tick, int camera){
-    
+void Game::renderPlayers(float tick, int camera){   
     float x;
     float y;
     float c;
@@ -407,10 +443,7 @@ void Game::renderPlayers(float tick, int camera){
         window.draw(player[(i+camera)%2]->getCar());
         player[(i+camera)%2]->interpola(actual[(i+camera)%2+N_IA].position.x, actual[(i+camera)%2+N_IA].position.y, actual[(i+camera)%2+N_IA].rotation, actual[(i+camera)%2+N_IA].scale);
         //std::cout << "CAR ----- " << player[0]->getCar().getPosition().x << ", " << player[0]->getCar().getPosition().y << std::endl << std::endl;
-    }
-
-
-        
+    }     
 }
 
 void Game::renderEnemies(float tick){
@@ -452,16 +485,18 @@ void Game::checkPoints(){
             IAs[i]->setCheckPoint(j, false);
         }
     }
-    
-    j = player[0]->getPosition() % 12;
-    if(player[0]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds()) && !player[0]->getFlag(j) && player[0]->handleIncremenet(j)){
-         player[0]->setCheckPoint(j, true);
-         player[0]->setVisited(j);
-         player[0]->incrementPosition(1);
+    for(int i = 0; i < N_PLAYERS; i++){
+        
+        j = player[i]->getPosition() % 12;
+        if(player[i]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds()) && !player[i]->getFlag(j) && player[i]->handleIncremenet(j)){
+             player[i]->setCheckPoint(j, true);
+             player[i]->setVisited(j);
+             player[i]->incrementPosition(1);
 
-     }
-     else if(!(player[0]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds())))
-         player[0]->setCheckPoint(j, false);    
+         }
+         else if(!(player[i]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds())))
+             player[i]->setCheckPoint(j, false);    
+    }
 }
 
 void Game::checkCollisionsBetweeenHitbox(){
@@ -493,6 +528,7 @@ void Game::checkCollisionsBetweeenPlayers(){
     float x;
     float y;
     SAT::MTV Sat_result;
+    
     for(int i=0; i< N_IA; i++){
         if(!IAs[i]->isOnAir()){
             
@@ -519,8 +555,8 @@ void Game::checkCollisionsBetweeenPlayers(){
         if(!player[i]->isOnAir()){  
             for(int j=0; j< N_IA; j++){
                 if(!IAs[j]->isOnAir() && (Sat_result = Sat.collides(player[i]->getVertex(), IAs[j]->getVertex())).collides){
-                    x = (player[i]->getCar().getPosition().x > IAs[i]->getCar().getPosition().x) ? 1 : -1;
-                    y = (player[i]->getCar().getPosition().y > IAs[i]->getCar().getPosition().y) ? 1 : -1;
+                    x = (player[i]->getCar().getPosition().x > IAs[j]->getCar().getPosition().x) ? 1 : -1;
+                    y = (player[i]->getCar().getPosition().y > IAs[j]->getCar().getPosition().y) ? 1 : -1;
 
                     player[i]->handlePlayersCollision(sf::Vector2f(Sat_result.axis.x*Sat_result.amount*x,  Sat_result.axis.y*Sat_result.amount*y));
                 }
@@ -555,10 +591,13 @@ void Game::checkSpecialInteractions(){
         if(player[i]->getCar().getGlobalBounds().intersects(JUMP.getGlobalBounds())){
             player[i]->setSpeed(1800);
             player[i]->setAir(true);
+            TURBO_SOUND.play();
         }
         for(int j = 0; j< 6; j++){
-            if(player[i]->getCar().getGlobalBounds().intersects(turboPos[j].getGlobalBounds()))
+            if(player[i]->getCar().getGlobalBounds().intersects(turboPos[j].getGlobalBounds())){
                 player[i]->setSpeed(1800);
+                TURBO_SOUND.play();
+            }
         }
     }
     //std::cout << "Scale " << player[0]->getCar().getScale().x << std::endl;

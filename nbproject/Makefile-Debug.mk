@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Animator.o \
 	${OBJECTDIR}/AssetManager.o \
 	${OBJECTDIR}/Car.o \
-	${OBJECTDIR}/Collect.o \
 	${OBJECTDIR}/Enemy.o \
 	${OBJECTDIR}/Game.o \
 	${OBJECTDIR}/Player.o \
@@ -60,7 +59,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib /usr/lib/libsfml-graphics.so /usr/lib/libsfml-system.so /usr/lib/libsfml-window.so
+LDLIBSOPTIONS=-L/usr/lib /usr/lib/libsfml-graphics.so /usr/lib/libsfml-system.so /usr/lib/libsfml-window.so /usr/lib/libsfml-audio.so /usr/lib/libsfml-network.so
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -71,6 +70,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-graphics.so
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-system.so
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-window.so
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-audio.so
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-network.so
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -90,11 +93,6 @@ ${OBJECTDIR}/Car.o: Car.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/include/SFML -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Car.o Car.cpp
-
-${OBJECTDIR}/Collect.o: Collect.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/SFML -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Collect.o Collect.cpp
 
 ${OBJECTDIR}/Enemy.o: Enemy.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -127,7 +125,7 @@ ${OBJECTDIR}/main.o: main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-graphics.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-system.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-window.so
+	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-graphics.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-system.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-window.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-audio.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-network.so
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso
 
 # Subprojects

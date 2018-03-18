@@ -15,9 +15,9 @@
 #include "Game.h"
 
 int main(int argc, char** argv) {
-
+    
     //JUGADORES HUMANOS [1, 2] , VUELTAS
-        Game game       (1     ,    2);
+        Game game       (1     ,    3);
         game.go();
     
 }

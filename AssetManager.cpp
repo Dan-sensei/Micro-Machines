@@ -33,10 +33,21 @@ sf::Texture& AssetManager::GetTexture(const std::string& filename){
     }
 }
 
-/*
- /usr/include/c++/7.3.0
- ../build/include
- */
+sf::SoundBuffer& AssetManager::GetSoundBuffer(const std::string& filename){
+    
+    auto& sBufferMap = sInstance->m_SoundBuffers;
+    auto pairFound = sBufferMap.find(filename);
+    
+    if(pairFound != sBufferMap.end()){
+        return pairFound->second;
+    }
+    else{
+        auto& sBuffer = sBufferMap[filename];
+        sBuffer.loadFromFile(filename);
+        return sBuffer;
+    }
+}
+
 sf::Font& AssetManager::GetFont(const std::string& filename){
     
     auto& fontMap = sInstance->m_Fonts;

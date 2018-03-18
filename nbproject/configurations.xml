@@ -7,7 +7,6 @@
       <itemPath>Animator.h</itemPath>
       <itemPath>AssetManager.h</itemPath>
       <itemPath>Car.h</itemPath>
-      <itemPath>Collect.h</itemPath>
       <itemPath>Enemy.h</itemPath>
       <itemPath>Game.h</itemPath>
       <itemPath>Player.h</itemPath>
@@ -23,7 +22,6 @@
       <itemPath>Animator.cpp</itemPath>
       <itemPath>AssetManager.cpp</itemPath>
       <itemPath>Car.cpp</itemPath>
-      <itemPath>Collect.cpp</itemPath>
       <itemPath>Enemy.cpp</itemPath>
       <itemPath>Game.cpp</itemPath>
       <itemPath>Player.cpp</itemPath>
@@ -68,6 +66,8 @@
             <linkerLibFileItem>/usr/lib/libsfml-graphics.so</linkerLibFileItem>
             <linkerLibFileItem>/usr/lib/libsfml-system.so</linkerLibFileItem>
             <linkerLibFileItem>/usr/lib/libsfml-window.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/lib/libsfml-audio.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/lib/libsfml-network.so</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -82,10 +82,6 @@
       <item path="Car.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Car.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Collect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Collect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Enemy.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -137,10 +133,6 @@
       <item path="Car.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Car.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Collect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Collect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Enemy.cpp" ex="false" tool="1" flavor2="0">
       </item>
