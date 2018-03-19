@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
-CND_ARTIFACT_NAME_Debug=juegaso
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/juegaso
+CND_ARTIFACT_NAME_Debug=micro
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/micro
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
-CND_PACKAGE_NAME_Debug=juegaso.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/juegaso.tar
+CND_PACKAGE_NAME_Debug=micro.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/micro.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=juegaso
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/juegaso
+CND_ARTIFACT_NAME_Release=micro
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/micro
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=juegaso.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/juegaso.tar
+CND_PACKAGE_NAME_Release=micro.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/micro.tar
 #
 # include compiler specific variables
 #

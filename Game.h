@@ -92,6 +92,7 @@ private:
         int* posicion;
         Car* target;
     };
+    sf::Text endMessage;
     namepos leaderboard[6];
     
 public:

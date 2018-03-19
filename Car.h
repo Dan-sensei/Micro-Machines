@@ -71,6 +71,7 @@ public:
     void setAir(bool set);
     
     void setSpeed(float s);
+    
 };
 
 #endif /* CAR_H */

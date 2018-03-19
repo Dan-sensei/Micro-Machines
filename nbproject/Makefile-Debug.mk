@@ -63,21 +63,21 @@ LDLIBSOPTIONS=-L/usr/lib /usr/lib/libsfml-graphics.so /usr/lib/libsfml-system.so
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-graphics.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: /usr/lib/libsfml-graphics.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-system.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: /usr/lib/libsfml-system.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-window.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: /usr/lib/libsfml-window.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-audio.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: /usr/lib/libsfml-audio.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: /usr/lib/libsfml-network.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: /usr/lib/libsfml-network.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/Animator.o: Animator.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -126,7 +126,7 @@ ${OBJECTDIR}/main.o: main.cpp
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
 	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-graphics.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-system.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-window.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-audio.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsfml-network.so
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/juegaso
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/micro
 
 # Subprojects
 .clean-subprojects:

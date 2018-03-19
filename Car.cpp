@@ -59,39 +59,18 @@ Car::~Car() {
     p_pos = NULL;
 }
 
-sf::Sprite Car::getCar(){
-    return car;
-}
-
-sf::Vector2f* Car::getVertex(){
-    return vertex;
-}
-
-void Car::incrementPosition(int pos){
-    position += pos;
-}
-
-int Car::getPosition(){
-    return position;
-}
-
-void Car::setCheckPoint(int i, bool flag){
-    checkPoints[i] = flag;
-}
-
-bool Car::getFlag(int i){
-    return checkPoints[i];
-}
-
-void Car::setVisited(int i){
-    visited[i] = true;
-}
+sf::Sprite Car::getCar(){ return car; }
+sf::Vector2f* Car::getVertex(){ return vertex; }
+void Car::incrementPosition(int pos){ position += pos; }
+int Car::getPosition(){ return position; }
+void Car::setCheckPoint(int i, bool flag){ checkPoints[i] = flag; }
+bool Car::getFlag(int i){ return checkPoints[i]; }
+void Car::setVisited(int i){ visited[i] = true; }
 
 bool Car::handleIncremenet(int i){
         
     if(position != 0 && position % 12 == 0){
-        std::cout  << "VUELTA!" << std::endl;
-        vueltas++;
+            vueltas++;
         for (int i = 0; i< 12; i++)
             visited[i]=false;
     }
@@ -145,14 +124,6 @@ void Car::interpola(float x, float y, float r, float s){
     car.setScale(s, s);
 }
 
-bool Car::isOnAir(){
-    return onAir;
-}
-
-void Car::setAir(bool set){
-    onAir = set;
-}
-
-void Car::setSpeed(float s){
-    SPEED = s;
-}
+bool Car::isOnAir() { return onAir; }
+void Car::setAir(bool set) { onAir = set; }
+void Car::setSpeed(float s){ SPEED = s; }

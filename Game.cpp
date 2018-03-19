@@ -12,10 +12,12 @@
  */
 
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Joystick.hpp>
 #include <iostream>
 
 #include "Game.h"
 
+#define FRAMERATE 60
 #define TICK 1000/35
 
 Game::Game(int N, int nVueltas):
@@ -23,7 +25,8 @@ window(sf::VideoMode(1200, 900), "MicroMachines - Neon Edition"),
 animator(sprite)
 {
     window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width/2 -600, 50));
-
+    window.setFramerateLimit(FRAMERATE);
+    
     N_PLAYERS = N;
     N_IA = 4;
     VUELTAS = nVueltas;
@@ -53,7 +56,7 @@ animator(sprite)
     Cool_Map = sf::Sprite (AssetManager::GetTexture("Images/ULTIMATE_MAP.png"));
     BACKGROUND = sf::Sprite (AssetManager::GetTexture("Images/BACKGROUND.jpg"));
     BACKGROUND.setOrigin(4471, 3284.5);
-    BACKGROUND.setPosition(3800, 1835);
+    BACKGROUND.setPosition(3700, 1835);
     window.setView(view);  
     
     keys = new bool[256];
@@ -65,7 +68,7 @@ animator(sprite)
     
     player[0] = new Player(1, "Images/HERO.jpg", startPos, 1000, 900, 0, dtAsSeconds, 200, keys);
     player[1] = new Player(2, "Images/HERO_2.jpg", sf::Vector2f(400, 1950), 1000, 900, 0, dtAsSeconds, 220, keys);
-    IAs[0] = new Enemy("Images/BOSS.jpg", sf::Vector2f(400, 1550), 950, 1050, 0, dtAsSeconds); //1000
+    IAs[0] = new Enemy("Images/BOSS.jpg", sf::Vector2f(400, 1550), 1000, 1050, 0, dtAsSeconds); //1000
     IAs[1] = new Enemy("Images/IA1.jpg", sf::Vector2f(400, 1750), 920, 900, 0, dtAsSeconds);  //900
     IAs[2] = new Enemy("Images/IA2.jpg", sf::Vector2f(200, 1650), 900, 1000, 0, dtAsSeconds);    //1000
     IAs[3] = new Enemy("Images/IA3.jpg", sf::Vector2f(200, 1450), 980, 950, 0, dtAsSeconds);  //950
@@ -153,6 +156,7 @@ animator(sprite)
     sprite.setPosition(1600, 291.5);
     
     TURBO_SOUND.setBuffer(AssetManager::GetSoundBuffer("Sounds/TURBO.ogg"));
+    endMessage = sf::Text("", AssetManager::GetFont("Fonts/LemonMilk.otf"));
     finisher = false;
 }
 
@@ -212,7 +216,11 @@ void Game::handleEvents(){
             case sf::Event::KeyReleased:
                 keys[event.key.code]= false;
                 break;
-
+            
+            case sf::Event::EventType::JoystickButtonPressed:
+                std::cout<< "Tecla " << event.joystickButton.button << std::endl;
+                break;
+                
             default:
                 break;
         }
@@ -256,6 +264,7 @@ void Game::update(){                                                // <--------
             NIGHT_OF_FIRE.stop();
             MRKRAB_VIOLIN.openFromFile("Sounds/MRKRAB_VIOLIN.ogg");
             MRKRAB_VIOLIN.play();
+            (N_PLAYERS == 2) ? endMessage.setString("LOOSERS") : endMessage.setString("lOOSER");
         }
     }
     
@@ -270,6 +279,7 @@ void Game::update(){                                                // <--------
             NIGHT_OF_FIRE.stop();
             AHH_BITCONNEEEEEECT.openFromFile("Sounds/AHH_BITCONNEEEEEECT.ogg");
             AHH_BITCONNEEEEEECT.play();
+            endMessage.setString("WINNER");
         }
     }
 }
@@ -306,9 +316,10 @@ void Game::render_init(){
     
     window.setView(UI);
     sf::Text countdown = sf::Text(std::to_string(3-(int)elapsedTime.asSeconds()), AssetManager::GetFont("Fonts/LemonMilk.otf"));  
-    
+    countdown.setOrigin(countdown.getLocalBounds().width/2, countdown.getLocalBounds().height/2);
     countdown.setCharacterSize(150);
-    countdown.setPosition(view.getCenter().x, view.getCenter().y-150);
+    int fix = (N_PLAYERS == 2) ? 90 : 0;
+    countdown.setPosition(view.getCenter().x, view.getCenter().y - fix);
     countdown.setFillColor(Light);
     window.draw(countdown);
     window.display();
@@ -337,14 +348,14 @@ void Game::render(float tick){                                       // <-------
     
     /* POSICIONES EN LA CARRERA */
     int map = 80;
-    vueltas.setPosition(window.mapPixelToCoords(sf::Vector2i(10, 20)));
-    vueltas.setString( "VUELTA "+std::to_string(player[0]->getVueltas()) + " / " +std::to_string(VUELTAS) );
+    vueltas.setPosition(window.mapPixelToCoords(sf::Vector2i(10, 20)));        
+    if(!finisher) vueltas.setString( "VUELTA "+std::to_string(player[0]->getVueltas()+1) + " / " +std::to_string(VUELTAS) );
     window.draw(vueltas);
     sf::Text display;
     for(int i = 0; i < (N_IA+N_PLAYERS); i++){
         display = sf::Text(std::to_string(i+1)+" - ", AssetManager::GetFont("Fonts/LemonMilk.otf"));
         display.setOrigin(display.getLocalBounds().width/2, display.getLocalBounds().height/2);
-        display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map)));
+        display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map-5)));
         leaderboard[i].picture.setPosition(window.mapPixelToCoords(sf::Vector2i(70, map)));
         window.draw(leaderboard[i].picture);
         window.draw(display);
@@ -366,12 +377,12 @@ void Game::render(float tick){                                       // <-------
         renderEnemies(tick);
         map = 540;
         vueltas.setPosition(window.mapPixelToCoords(sf::Vector2i(10, 470)));
-        vueltas.setString( "VUELTA "+std::to_string(player[1]->getVueltas()) + " / " +std::to_string(VUELTAS) );
+        if(!finisher) vueltas.setString( "VUELTA "+std::to_string(player[1]->getVueltas()+1) + " / " +std::to_string(VUELTAS) );
         window.draw(vueltas);
         for(int i = 0; i < (N_IA+N_PLAYERS); i++){
             display = sf::Text(std::to_string(i+1)+" - ", AssetManager::GetFont("Fonts/LemonMilk.otf"));
             display.setOrigin(display.getLocalBounds().width/2, display.getLocalBounds().height/2);
-            display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map)));
+            display.setPosition(window.mapPixelToCoords(sf::Vector2i(35, map-5)));
             leaderboard[i].picture.setPosition(window.mapPixelToCoords(sf::Vector2i(70, map)));
             window.draw(leaderboard[i].picture);
             window.draw(display);
@@ -381,14 +392,14 @@ void Game::render(float tick){                                       // <-------
     
     window.setView(UI);
     if(finisher){
-        sf::Text win = sf::Text("WINNER", AssetManager::GetFont("Fonts/LemonMilk.otf"));  
-        win.setCharacterSize(75);
-        win.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2-300, window.getSize().y/2-50)));
+        sf::Text win = sf::Text(endMessage.getString(), AssetManager::GetFont("Fonts/LemonMilk.otf"));  
+        win.setCharacterSize(150);
+        win.setOrigin(win.getLocalBounds().width/2, win.getLocalBounds().height/2);
+        win.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2, window.getSize().y/2-35)));
         win.setFillColor(Light);
         
-        
         winner.setScale(2, 2);
-        winner.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2+100, window.getSize().y/2-10)));
+        winner.setPosition(window.mapPixelToCoords(sf::Vector2i(window.getSize().x/2, window.getSize().y/2-225)));
         window.draw(winner);
         window.draw(win);
        
@@ -492,7 +503,6 @@ void Game::checkPoints(){
              player[i]->setCheckPoint(j, true);
              player[i]->setVisited(j);
              player[i]->incrementPosition(1);
-
          }
          else if(!(player[i]->getCar().getGlobalBounds().intersects(control[j].figure.getGlobalBounds())))
              player[i]->setCheckPoint(j, false);    
@@ -591,12 +601,14 @@ void Game::checkSpecialInteractions(){
         if(player[i]->getCar().getGlobalBounds().intersects(JUMP.getGlobalBounds())){
             player[i]->setSpeed(1800);
             player[i]->setAir(true);
-            TURBO_SOUND.play();
+            if(!finisher)
+                TURBO_SOUND.play();
         }
         for(int j = 0; j< 6; j++){
             if(player[i]->getCar().getGlobalBounds().intersects(turboPos[j].getGlobalBounds())){
                 player[i]->setSpeed(1800);
-                TURBO_SOUND.play();
+                if(!finisher)
+                    TURBO_SOUND.play();
             }
         }
     }
