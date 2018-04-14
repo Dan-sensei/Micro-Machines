@@ -10,16 +10,16 @@ Dado que nuestro grupo emplea Manjaro, el cual es una distribución de ArchLinux
 Project Properties_________________________________________________________
 			|
 			|-- C++ Compiler
-			|		|--------- Include Directories: /usr/include/SFML
+			|	|--------- Include Directories: /usr/include/SFML
 			|
 			|
 			|-- Linker
-					|--------- Additional Library Directories: /usr/lib
-					|--------- Libraries > Add Librarie File...
-												|----- libsfml-window.so
-												|----- libsfml-audio.so
-												|----- libsfml-graphics.so
-												|----- libsfml-system.so
+				|--------- Additional Library Directories: /usr/lib
+				|--------- Libraries > Add Librarie File...
+								|----- libsfml-window.so
+								|----- libsfml-audio.so
+								|----- libsfml-graphics.so
+								|----- libsfml-system.so
 
 ```
 
