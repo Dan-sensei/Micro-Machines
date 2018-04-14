@@ -1,4 +1,6 @@
 # Classic-game-in-C
+
+```
 ======================================================================================================
 =	______  _______                         ______  ___            ______ _____                      =
 =	___   |/  /__(_)__________________      ___   |/  /_____ _________  /____(_)___________________  =
@@ -12,11 +14,11 @@
 =								  -Danny Gabriel Rivera Solórzano-									 =
 =																									 =
 ======================================================================================================
-
+```
 
 Dado que nuestro grupo emplea Manjaro, el cual es una distribución de ArchLinux, la configuración de Netbeans es ligeramente distinta a la de Ubuntu:
 
-
+```
 Project Properties_________________________________________________________
 			|
 			|-- C++ Compiler
@@ -31,11 +33,12 @@ Project Properties_________________________________________________________
 												|----- libsfml-graphics.so
 												|----- libsfml-system.so
 
+```
 
+## Controles
 
-Controles__________________________________________________________________
-
- 	JUGADOR 1:                                            
+####	JUGADOR 1:
+```
 	                        .---.                        
 	                       /. ./|                        
 	                    .-'-. ' |                        
@@ -58,9 +61,10 @@ Controles__________________________________________________________________
 	|  ,     .-./          `--'---'           \   \  /   
 	 `--`---'                                  `----'    
                                                      
+```
 
-
- 	JUGADOR 2:
+####	JUGADOR 2:
+```
 
 							     .
 							   .:;:.
@@ -92,9 +96,9 @@ Controles__________________________________________________________________
       ':					  ':::::'	                  :'
 							    ':`
 
+```
 
-
-	Salir:               
+###	Salir:               
 	                 
 		    ,----..      
 		   /   /   \     
@@ -113,7 +117,7 @@ Controles__________________________________________________________________
 
 
 
-Parámetros_________________________________________________________________
+## Parámetros
 
 	Nº JUGADORES: main.cpp -> Línea 20: Primer parámetro
 	  Nº VUELTAS: main.cpp -> Línea 20: Segundo parámetro
@@ -131,7 +135,7 @@ Parámetros_________________________________________________________________
 
 
 
-Mejoras realizadas_________________________________________________________
+## Mejoras realizadas
 
 	- Interpolación -> Se puede ajustar desde el #define TICK de Game.cpp (Línea 20)
 	- 2 Jugadores 	-> Pantalla dividida
