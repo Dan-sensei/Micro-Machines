@@ -1,20 +1,8 @@
 # Micro Machines
 
-```
-======================================================================================================
-=	______  _______                         ______  ___            ______ _____                      =
-=	___   |/  /__(_)__________________      ___   |/  /_____ _________  /____(_)___________________  =
-=	__  /|_/ /__  /_  ___/_  ___/  __ \     __  /|_/ /_  __ `/  ___/_  __ \_  /__  __ \  _ \_  ___/  =
-=	_  /  / / _  / / /__ _  /   / /_/ /     _  /  / / / /_/ // /__ _  / / /  / _  / / /  __/(__  )   =
-=	/_/  /_/  /_/  \___/ /_/    \____/      /_/  /_/  \__,_/ \___/ /_/ /_//_/  /_/ /_/\___//____/    =
-=                                                                                                    =
-=	 																								 =
-= 							   Videojuego desarrollado en C++ con SFML 								 =
-=																									 =
-=								  -Danny Gabriel Rivera Solórzano-									 =
-=																									 =
-======================================================================================================
-```
+
+### Videojuego desarrollado en C++ con SFML
+
 
 Dado que nuestro grupo emplea Manjaro, el cual es una distribución de ArchLinux, la configuración de Netbeans es ligeramente distinta a la de Ubuntu:
 
@@ -144,3 +132,7 @@ Project Properties_________________________________________________________
 	- Salto			-> Se desactivan las colisiones entre coches en el aire
 	- Animaciones	-> Todos los turbos se representan mediante un gif animado
 	- Sonidos		-> Música de fondo, victoria y derrota, así como un efecto al coger el turbo
+
+
+### Autor
+Danny Gabriel Rivera Solórzano
