@@ -54,35 +54,35 @@ Project Properties_________________________________________________________
 ####	JUGADOR 2:
 ```
 
-							     .
-							   .:;:.
-							 .:;;;;;:.
-							   ;;;;;
-							   ;;;;;
-							   ;;;;;
-							   ;;;;;
-							   : ;;;
-							     ;:;
-							   . :.;
-							     . :
-							   .   .
+                                 .
+                               .:;:.
+                             .:;;;;;:.
+                               ;;;;;
+                               ;;;;;
+                               ;;;;;
+                               ;;;;;
+                               : ;;;
+                                 ;:;
+                               . :.;
+                                 . :
+                               .   .
 
-							      .
+                                  .
 
-							     .
-							       .
-							   . ;.
-							    .;
-							     ;;.
-							   ;.;;
-        					   ;;;;.
-     						   ;;;;;
-	   .					   ;;;;;	                  .
-	 .;;............ ..		   ;;;;;	   .. ............;;.
-   .;;;;::::::::::::..		   ;;;;;	    ..::::::::::::;;;;.
-    ':;;:::::::::::: . .	 ..;;;;;.. 	  . . ::::::::::::;;:'
-      ':					  ':::::'	                  :'
-							    ':`
+                                 .
+                                   .
+                               . ;.
+                                .;
+                                 ;;.
+                               ;.;;
+                               ;;;;.
+                               ;;;;;
+       .                       ;;;;;                      .
+     .;;............ ..        ;;;;;       .. ............;;.
+   .;;;;::::::::::::..         ;;;;;        ..::::::::::::;;;;.
+    ':;;:::::::::::: . .     ..;;;;;..    . . ::::::::::::;;:'
+      ':                      ':::::'                     :'
+                                ':`
 
 ```
 
@@ -127,11 +127,11 @@ Project Properties_________________________________________________________
 
 	- Interpolación -> Se puede ajustar desde el #define TICK de Game.cpp (Línea 20)
 	- 2 Jugadores 	-> Pantalla dividida
-	- SAT  			-> Separation Axis Theorem para las colisiones
+	- SAT  		-> Separation Axis Theorem para las colisiones
 	- Turbo
-	- Salto			-> Se desactivan las colisiones entre coches en el aire
+	- Salto		-> Se desactivan las colisiones entre coches en el aire
 	- Animaciones	-> Todos los turbos se representan mediante un gif animado
-	- Sonidos		-> Música de fondo, victoria y derrota, así como un efecto al coger el turbo
+	- Sonidos	-> Música de fondo, victoria y derrota, así como un efecto al coger el turbo
 
 
 ### Autor
