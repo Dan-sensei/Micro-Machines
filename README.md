@@ -111,7 +111,7 @@ Project Properties_________________________________________________________
 	  Nº VUELTAS: main.cpp -> Línea 20: Segundo parámetro
 
 	int main(int argc, char** argv) {
-        Game game       (1, 2);				// 1 jugador,   2 Vueltas
+        Game game       (1, 2);			// 1 jugador,   2 Vueltas
         game.go();
 	}
 
